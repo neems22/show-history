@@ -181,6 +181,9 @@ label{display:block;font-size:12px;letter-spacing:.1em;text-transform:uppercase;
 .aibtns{display:flex;gap:8px;flex-wrap:wrap}
 .aibtns .btn{padding:10px 14px;font-size:14px}
 .aibtns a.btn{color:var(--text)}
+.filters{display:flex;gap:10px;margin-top:10px;flex-wrap:wrap}
+.filters label{display:flex;align-items:center;gap:8px;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:0}
+.filters select{width:auto;max-width:56vw;padding:8px 12px;border-radius:var(--pill);font-size:14px;text-transform:none;letter-spacing:0;background:var(--panel)}
 .ver{margin:28px 0 8px;text-align:center;font-size:12px;color:var(--muted);letter-spacing:.08em}
 .ver .credit{margin-top:6px;font-size:11px;letter-spacing:.04em;opacity:.8}
 .wkbadge{display:inline-block;margin:6px 0 0;padding:2px 9px;border-radius:999px;background:rgba(0,0,0,.38);color:#fff;font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase}
@@ -191,7 +194,7 @@ label{display:block;font-size:12px;letter-spacing:.1em;text-transform:uppercase;
   html[data-theme]{--bg:#fff;--panel:#fff;--panel2:#f1f1f4;--line:#d6d6dc;--text:#111;--muted:#555;--title-grad:linear-gradient(#111,#111);--accent:#111;--on-accent:#fff;--head-font:inherit;--head-case:none}
   html,body{background:#fff!important;color:#111;-webkit-print-color-adjust:exact;print-color-adjust:exact}
   body{padding:0}
-  .dock,.toast,.scrim,.sheet,.controls,.top,.section-title,.intro,.rename,.sample-note,#tip,.stats .stat span+*{display:none!important}
+  .dock,.toast,.scrim,.sheet,.controls,.filters,.top,.section-title,.intro,.rename,.sample-note,#tip,.stats .stat span+*{display:none!important}
   .wrap{padding:0;max-width:none}
   header{padding:0 0 8px}
   header::after{display:none!important}
@@ -244,6 +247,10 @@ label{display:block;font-size:12px;letter-spacing:.1em;text-transform:uppercase;
       <input id="q" type="search" placeholder="Find an artist..." autocomplete="off" autocapitalize="off" spellcheck="false">
     </div>
     <div class="years" id="years"></div>
+    <div class="filters" id="filters">
+      <label>Sort <select id="sortSel"><option value="new">Newest first</option><option value="old">Oldest first</option><option value="az">Festival A–Z</option></select></label>
+      <label>Show <select id="festSel"></select></label>
+    </div>
   </div>
 
   <p class="hint" id="tip" style="margin:0 0 8px"></p>
@@ -266,7 +273,7 @@ label{display:block;font-size:12px;letter-spacing:.1em;text-transform:uppercase;
 (function(){
 "use strict";
 var KEY="showHistory.v1";
-var APP_VERSION="1.1.1",APP_DATE="November 2026";
+var APP_VERSION="1.2",APP_DATE="November 2026";
 var THEMES={
  neon:{name:"Neon",tag:"Dark with glow. The original.",bg:"#07070d",fg:"#f2f2f8",palette:["#7c3aed","#2563eb","#0891b2","#059669","#65a30d","#ca8a04","#ea580c","#dc2626","#db2777","#c026d3","#4f46e5","#0d9488"]},
  metal:{name:"Heavy Metal",tag:"Black, blood red and steel.",bg:"#080808",fg:"#ebe6de",palette:["#9b0f0f","#c01818","#5c606a","#7b8089","#3d4148","#a1582a","#6e1f1f","#8a8372","#4a4e56","#933a16","#2f3136","#7d1d3a"]},
@@ -311,7 +318,8 @@ function sample(){
      {label:"Sat July 9",artists:["Static Garden","Juno Vale","Kito Drift"]}]}
   ]};
 }
-var ui={year:"all",q:"",view:false};
+var ui={year:"all",q:"",view:false,sort:"new",fest:""};
+try{var sv=localStorage.getItem("showHistory.sort");if(sv==="new"||sv==="old"||sv==="az")ui.sort=sv;}catch(e){}
 var state=null;
 
 /* ---------- share links ---------- */
@@ -356,6 +364,17 @@ function allSets(){ // artist -> appearances
 }
 
 /* ---------- render ---------- */
+var MON={jan:1,feb:2,mar:3,apr:4,may:5,jun:6,jul:7,aug:8,sep:9,oct:10,nov:11,dec:12};
+function dateKey(label){
+  var t=String(label||"").toLowerCase();
+  var m=/\b(jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)[a-z]*\.?\s+(\d{1,2})\b/.exec(t);
+  if(m)return MON[m[1]]*100+parseInt(m[2],10);
+  m=/\b(\d{1,2})(?:st|nd|rd|th)?\s+(?:of\s+)?(jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)/.exec(t);
+  if(m)return MON[m[2]]*100+parseInt(m[1],10);
+  return null;
+}
+function showKey(s){var k=null;s.days.forEach(function(d){var x=dateKey(d.label);if(x!=null&&(k==null||x<k))k=x;});return k;}
+function cmpNullLast(a,b,dir){if(a==null&&b==null)return 0;if(a==null)return 1;if(b==null)return -1;return dir*(a-b);}
 function render(){
   var t=state.title||"Show History";
   $("title").textContent=t;document.title=t;
@@ -366,7 +385,12 @@ function render(){
   $("addBtn").hidden=ui.view;$("menuBtn").hidden=ui.view;$("mineBtn").hidden=!ui.view;
   $("shareBtn").hidden=ui.view&&false;
   var map=allSets();
-  var years=Array.from(new Set(state.shows.map(function(s){return s.year;}))).sort(function(a,b){return b-a;});
+  var names=Array.from(new Set(state.shows.map(function(s){return s.festival;}))).sort(function(a,b){return a.localeCompare(b);});
+  if(ui.fest&&names.map(norm).indexOf(norm(ui.fest))<0)ui.fest="";
+  var fs=$("festSel");fs.textContent="";[""].concat(names).forEach(function(n){var o=el("option",null,n||"All festivals");o.value=n;fs.appendChild(o);});fs.value=ui.fest;
+  $("sortSel").value=ui.sort;$("filters").hidden=!state.shows.length;
+  var visible=state.shows.filter(function(s){return !ui.fest||norm(s.festival)===norm(ui.fest);});
+  var years=Array.from(new Set(visible.map(function(s){return s.year;}))).sort(function(a,b){return ui.sort==="old"?a-b:b-a;});
   if(ui.year!=="all"&&years.indexOf(ui.year)<0)ui.year="all";
 
   // stats
@@ -407,7 +431,10 @@ function render(){
   var totalHits=0;
   shown.forEach(function(y){
     var block=el("section","yearblock");
-    var shows=state.shows.filter(function(s){return s.year===y;});
+    var shows=visible.filter(function(s){return s.year===y;}).map(function(s,i){return {s:s,i:i,k:showKey(s)};}).sort(function(a,b){
+      var r=ui.sort==="az"?(a.s.festival.localeCompare(b.s.festival)||cmpNullLast(a.k,b.k,1)):cmpNullLast(a.k,b.k,ui.sort==="old"?1:-1);
+      return r||a.i-b.i;
+    }).map(function(o){return o.s;});
     var head=el("div","yearhead");head.appendChild(el("h3",null,y));
     var n=0;shows.forEach(function(s){s.days.forEach(function(d){n+=d.artists.length;});});
     head.appendChild(el("small",null,shows.length+" event"+(shows.length>1?"s":"")+" · "+n+" sets"));
@@ -421,7 +448,8 @@ function render(){
       var eb=el("button",null,"✎ Edit");eb.style.cssText="position:absolute;right:10px;top:10px;font-size:12px;font-weight:700;background:rgba(0,0,0,.3);padding:4px 10px;border-radius:999px";
       eb.onclick=function(){openEdit(s.id);};if(!ui.view)h.appendChild(eb);
       col.appendChild(h);
-      s.days.forEach(function(d,di){
+      s.days.map(function(d,i){return {d:d,i:i,k:dateKey(d.label)};}).sort(function(a,b){return cmpNullLast(a.k,b.k,1)||a.i-b.i;}).forEach(function(o){
+        var d=o.d,di=o.i;
         var day=el("div","day");
         var dh=el("div","day-head");dh.style.background=c+"33";dh.style.color="var(--text)";dh.style.borderLeft="4px solid "+c;
         dh.appendChild(el("span",null,d.label));var em=el("em",null,d.artists.length+(d.artists.length===1?" set":" sets"));if(!ui.view)em.appendChild(el("span","pen","✎"));dh.appendChild(em);if(!ui.view)dh.onclick=function(){openEdit(s.id,di);};
@@ -921,6 +949,8 @@ function wizCheck(f,e,wk){
 $("addBtn").onclick=function(){wizPick();};
 $("menuBtn").onclick=openBackup;
 $("q").oninput=function(e){ui.q=e.target.value;render();};
+$("sortSel").onchange=function(e){ui.sort=e.target.value;try{localStorage.setItem("showHistory.sort",ui.sort);}catch(er){}render();};
+$("festSel").onchange=function(e){ui.fest=e.target.value;render();};
 $("clearSample").onclick=function(){state={sample:false,title:state.title||"",colors:{},shows:[]};save();render();};
 document.addEventListener("keydown",function(e){if(e.key==="Escape")closeSheet();});
 
