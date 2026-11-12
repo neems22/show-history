@@ -182,6 +182,7 @@ label{display:block;font-size:12px;letter-spacing:.1em;text-transform:uppercase;
 .aibtns .btn{padding:10px 14px;font-size:14px}
 .aibtns a.btn{color:var(--text)}
 .ver{margin:28px 0 8px;text-align:center;font-size:12px;color:var(--muted);letter-spacing:.08em}
+.ver .credit{margin-top:6px;font-size:11px;letter-spacing:.04em;opacity:.8}
 .wkbadge{display:inline-block;margin:6px 0 0;padding:2px 9px;border-radius:999px;background:rgba(0,0,0,.38);color:#fff;font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase}
 .day-head{cursor:pointer}
 .day-head .pen{opacity:.6;margin-left:6px}
@@ -247,7 +248,7 @@ label{display:block;font-size:12px;letter-spacing:.1em;text-transform:uppercase;
 
   <p class="hint" id="tip" style="margin:0 0 8px"></p>
   <main id="main"></main>
-  <footer class="ver" id="ver"></footer>
+  <footer class="ver"><div id="ver"></div><div class="credit">vibe coded by Neems</div></footer>
 </div>
 
 <div class="dock">
@@ -265,7 +266,7 @@ label{display:block;font-size:12px;letter-spacing:.1em;text-transform:uppercase;
 (function(){
 "use strict";
 var KEY="showHistory.v1";
-var APP_VERSION="1.1",APP_DATE="November 2026";
+var APP_VERSION="1.1.1",APP_DATE="November 2026";
 var THEMES={
  neon:{name:"Neon",tag:"Dark with glow. The original.",bg:"#07070d",fg:"#f2f2f8",palette:["#7c3aed","#2563eb","#0891b2","#059669","#65a30d","#ca8a04","#ea580c","#dc2626","#db2777","#c026d3","#4f46e5","#0d9488"]},
  metal:{name:"Heavy Metal",tag:"Black, blood red and steel.",bg:"#080808",fg:"#ebe6de",palette:["#9b0f0f","#c01818","#5c606a","#7b8089","#3d4148","#a1582a","#6e1f1f","#8a8372","#4a4e56","#933a16","#2f3136","#7d1d3a"]},
