@@ -67,11 +67,22 @@ h1{margin:6px 0 0;font-size:clamp(32px,7vw,56px);line-height:1;
 .sample-note button{background:var(--note-btn);color:var(--note-btn-text);padding:6px 12px;border-radius:999px;font-weight:700;font-size:13px}
 
 /* stats */
-.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:18px 0}
-.stat{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:14px}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(128px,1fr));gap:10px;margin:18px 0}
+.stat{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:14px;text-align:left;color:inherit;cursor:pointer;font:inherit}
+.stat:active{transform:scale(.98)}
+.stat.on{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent) inset}
 .stat b{display:block;font-size:clamp(24px,5vw,36px);font-weight:800;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
 .stat span{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.1em}
-@media(max-width:640px){.stats{grid-template-columns:repeat(2,1fr)}}
+.yearhead{cursor:pointer;-webkit-user-select:none;user-select:none}
+.chev{font-size:18px;color:var(--muted);width:18px;display:inline-block}
+.foldchips{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 10px}
+.foldchip{font-size:12px;font-weight:700;color:#fff;padding:4px 10px;border-radius:999px}
+.yearblock.folded .board{display:none}
+.col.flash{animation:flash 1.6s ease}
+@keyframes flash{0%,60%{box-shadow:0 0 0 3px var(--accent),0 0 24px var(--accent)}100%{box-shadow:none}}
+.pick.match{border-style:dashed;border-color:var(--accent)}
+.listrow{display:flex;justify-content:space-between;align-items:baseline;gap:12px;width:100%;text-align:left;padding:11px 4px;border-bottom:1px solid var(--line);font-size:15px}
+.listrow small{color:var(--muted);font-size:12px;white-space:nowrap}
 
 /* top artists */
 .section-title{display:flex;align-items:baseline;justify-content:space-between;margin:22px 0 10px}
@@ -184,6 +195,8 @@ label{display:block;font-size:12px;letter-spacing:.1em;text-transform:uppercase;
 .filters{display:flex;gap:10px;margin-top:10px;flex-wrap:wrap}
 .filters label{display:flex;align-items:center;gap:8px;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:0}
 .filters select{width:auto;max-width:56vw;padding:8px 12px;border-radius:var(--pill);font-size:14px;text-transform:none;letter-spacing:0;background:var(--panel)}
+.savestatus{margin:10px 0 0;font-size:13px;color:var(--muted)}
+.savestatus.warn{color:var(--note-text)}
 .ver{margin:28px 0 8px;text-align:center;font-size:12px;color:var(--muted);letter-spacing:.08em}
 .ver .credit{margin-top:6px;font-size:11px;letter-spacing:.04em;opacity:.8}
 .wkbadge{display:inline-block;margin:6px 0 0;padding:2px 9px;border-radius:999px;background:rgba(0,0,0,.38);color:#fff;font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase}
@@ -194,12 +207,14 @@ label{display:block;font-size:12px;letter-spacing:.1em;text-transform:uppercase;
   html[data-theme]{--bg:#fff;--panel:#fff;--panel2:#f1f1f4;--line:#d6d6dc;--text:#111;--muted:#555;--title-grad:linear-gradient(#111,#111);--accent:#111;--on-accent:#fff;--head-font:inherit;--head-case:none}
   html,body{background:#fff!important;color:#111;-webkit-print-color-adjust:exact;print-color-adjust:exact}
   body{padding:0}
-  .dock,.toast,.scrim,.sheet,.controls,.filters,.top,.section-title,.intro,.rename,.sample-note,#tip,.stats .stat span+*{display:none!important}
+  .dock,.toast,.scrim,.sheet,.controls,.filters,.savestatus,#storeWarn,#a2hs,.top,.section-title,.intro,.rename,.sample-note,#tip,.stats .stat span+*{display:none!important}
   .wrap{padding:0;max-width:none}
   header{padding:0 0 8px}
   header::after{display:none!important}
   h1{font-size:30px;-webkit-text-fill-color:#111;color:#111;background:none}
-  .stats{grid-template-columns:repeat(4,1fr);gap:8px;margin:8px 0 14px}
+  .stats{grid-template-columns:repeat(5,1fr);gap:8px;margin:8px 0 14px}
+  .chev,.foldchips{display:none!important}
+  .yearblock.folded .board{display:grid!important}
   .stat{padding:8px 10px;border-radius:8px}
   .stat b{font-size:20px}
   .yearblock{margin:0 0 16px;break-inside:auto}
@@ -230,6 +245,9 @@ label{display:block;font-size:12px;letter-spacing:.1em;text-transform:uppercase;
     <p class="intro" id="intro">Log every festival and show you've been to, day by day, and every artist you caught. Your list saves privately in this browser.</p>
     <button class="rename" id="renameBtn">Rename</button> <button class="rename" id="themeBtn" style="margin-left:14px">Theme</button>
     <div id="viewNote" class="sample-note" hidden></div>
+    <p class="savestatus" id="saveStatus" hidden></p>
+    <div id="storeWarn" class="sample-note" hidden></div>
+    <div id="a2hs" class="sample-note" hidden></div>
     <div id="sampleNote" class="sample-note" hidden>
       <span>Showing made-up sample data so you can play with it.</span>
       <button id="clearSample">Clear sample &amp; start mine</button>
@@ -250,6 +268,8 @@ label{display:block;font-size:12px;letter-spacing:.1em;text-transform:uppercase;
     <div class="filters" id="filters">
       <label>Sort <select id="sortSel"><option value="new">Newest first</option><option value="old">Oldest first</option><option value="az">Festival A–Z</option></select></label>
       <label>Show <select id="festSel"></select></label>
+      <label>Type <select id="typeSel"><option value="">All</option><option value="festival">Festivals</option><option value="concert">Concerts</option></select></label>
+      <button class="btn" id="foldBtn" style="padding:8px 14px;font-size:13px">Fold all</button>
     </div>
   </div>
 
@@ -273,7 +293,7 @@ label{display:block;font-size:12px;letter-spacing:.1em;text-transform:uppercase;
 (function(){
 "use strict";
 var KEY="showHistory.v1";
-var APP_VERSION="1.2",APP_DATE="November 2026";
+var APP_VERSION="1.4",APP_DATE="November 2026";
 var THEMES={
  neon:{name:"Neon",tag:"Dark with glow. The original.",bg:"#07070d",fg:"#f2f2f8",palette:["#7c3aed","#2563eb","#0891b2","#059669","#65a30d","#ca8a04","#ea580c","#dc2626","#db2777","#c026d3","#4f46e5","#0d9488"]},
  metal:{name:"Heavy Metal",tag:"Black, blood red and steel.",bg:"#080808",fg:"#ebe6de",palette:["#9b0f0f","#c01818","#5c606a","#7b8089","#3d4148","#a1582a","#6e1f1f","#8a8372","#4a4e56","#933a16","#2f3136","#7d1d3a"]},
@@ -293,9 +313,33 @@ function load(){
   try{var r=localStorage.getItem(KEY);if(r)return JSON.parse(r);}catch(e){}
   return mem;
 }
+var storageOK=true,lastSaveAt=null;
+(function(){try{localStorage.setItem("__t","1");localStorage.removeItem("__t");}catch(e){storageOK=false;}})();
+function getBackupTime(){try{return parseInt(localStorage.getItem("showHistory.lastBackup")||"0",10)||0;}catch(e){return 0;}}
+function markBackup(){try{localStorage.setItem("showHistory.lastBackup",String(Date.now()));}catch(e){}updateStatus();}
+function ago(ts){var m=Math.round((Date.now()-ts)/60000);if(m<1)return "just now";if(m<60)return m+" min ago";var h=Math.round(m/60);if(h<24)return h+" hr ago";var d=Math.round(h/24);return d+(d===1?" day ago":" days ago");}
 function save(){
-  mem=state;
-  try{localStorage.setItem(KEY,JSON.stringify(state));}catch(e){}
+  mem=state;var ok=false;
+  try{var str=JSON.stringify(state);localStorage.setItem(KEY,str);ok=localStorage.getItem(KEY)===str;}catch(e){ok=false;}
+  storageOK=ok;
+  if(ok){lastSaveAt=Date.now();try{if(navigator.storage&&navigator.storage.persist)navigator.storage.persist();}catch(e){}}
+  updateStatus();
+}
+function updateStatus(){
+  var s=$("saveStatus"),w=$("storeWarn"),a=$("a2hs");if(!s||!w||!a||!state)return;
+  var has=!!(state.shows&&state.shows.length&&!state.sample&&!ui.view);
+  w.hidden=storageOK||ui.view;
+  if(!storageOK&&!ui.view)w.textContent="Heads up: this browser isn't saving your list (Private Browsing or blocked storage). Open the page in regular Safari, and use Export → Save backup file to keep a copy.";
+  s.hidden=!(has&&storageOK);
+  if(has&&storageOK){var bt=getBackupTime();s.textContent="✓ Saved on this device"+(lastSaveAt?" at "+new Date(lastSaveAt).toLocaleTimeString([],{hour:"numeric",minute:"2-digit"}):"")+"  ·  "+(bt?"Last backup "+ago(bt):"Not backed up yet");s.classList.toggle("warn",!bt);}
+  var ios=/iPad|iPhone|iPod/.test(navigator.userAgent)||(navigator.platform==="MacIntel"&&navigator.maxTouchPoints>1);
+  var standalone=!!(window.navigator.standalone||(window.matchMedia&&matchMedia("(display-mode: standalone)").matches));
+  var dismissed=false;try{dismissed=localStorage.getItem("showHistory.a2hs")==="1";}catch(e){}
+  if(!a.firstChild){
+    a.appendChild(el("span",null,"Tip: Safari can clear saved websites after a week of not using them. Tap Share, then Add to Home Screen, so your list sticks. Also back up now and then (Export)."));
+    var gb=el("button",null,"Got it");gb.onclick=function(){try{localStorage.setItem("showHistory.a2hs","1");}catch(e){}a.hidden=true;};a.appendChild(gb);
+  }
+  a.hidden=!(has&&ios&&!standalone&&!dismissed&&storageOK);
 }
 
 /* ---------- sample data (fictional) ---------- */
@@ -318,7 +362,9 @@ function sample(){
      {label:"Sat July 9",artists:["Static Garden","Juno Vale","Kito Drift"]}]}
   ]};
 }
-var ui={year:"all",q:"",view:false,sort:"new",fest:""};
+var ui={year:"all",q:"",view:false,sort:"new",fest:"",type:"",folded:{}};
+try{var fv=JSON.parse(localStorage.getItem("showHistory.folded")||"{}");if(fv&&typeof fv==="object")ui.folded=fv;}catch(e){}
+function saveFolded(){try{localStorage.setItem("showHistory.folded",JSON.stringify(ui.folded));}catch(e){}}
 try{var sv=localStorage.getItem("showHistory.sort");if(sv==="new"||sv==="old"||sv==="az")ui.sort=sv;}catch(e){}
 var state=null;
 
@@ -379,6 +425,7 @@ function render(){
   var t=state.title||"Show History";
   $("title").textContent=t;document.title=t;
   $("sampleNote").hidden=!state.sample||ui.view;
+  updateStatus();
   $("viewNote").hidden=!ui.view;
   $("intro").hidden=ui.view;
   $("renameBtn").hidden=ui.view;
@@ -389,17 +436,23 @@ function render(){
   if(ui.fest&&names.map(norm).indexOf(norm(ui.fest))<0)ui.fest="";
   var fs=$("festSel");fs.textContent="";[""].concat(names).forEach(function(n){var o=el("option",null,n||"All festivals");o.value=n;fs.appendChild(o);});fs.value=ui.fest;
   $("sortSel").value=ui.sort;$("filters").hidden=!state.shows.length;
-  var visible=state.shows.filter(function(s){return !ui.fest||norm(s.festival)===norm(ui.fest);});
+  $("typeSel").value=ui.type;
+  var visible=state.shows.filter(function(s){return (!ui.fest||norm(s.festival)===norm(ui.fest))&&(!ui.type||typeOf(s)===ui.type);});
   var years=Array.from(new Set(visible.map(function(s){return s.year;}))).sort(function(a,b){return ui.sort==="old"?a-b:b-a;});
   if(ui.year!=="all"&&years.indexOf(ui.year)<0)ui.year="all";
 
   // stats
   var days=0;state.shows.forEach(function(s){days+=s.days.length;});
-  var fests=new Set(state.shows.map(function(s){return norm(s.festival);})).size;
+  var nF=state.shows.filter(function(s){return typeOf(s)==="festival";}).length,nC=state.shows.length-nF;
+  var fests=new Set(state.shows.filter(function(s){return typeOf(s)==="festival";}).map(function(s){return norm(s.festival);})).size;
   var uniq=Object.keys(map).length;
   var st=$("stats");st.textContent="";
-  [[state.shows.length,"Festivals / shows"],[days,"Days out"],[uniq,"Unique artists"],[fests,"Different events"]].forEach(function(x){
-    var d=el("div","stat");d.appendChild(el("b",null,x[0]));d.appendChild(el("span",null,x[1]));st.appendChild(d);
+  [[nF,"Festivals",function(){toggleType("festival");},ui.type==="festival"],
+   [nC,"Concerts",function(){toggleType("concert");},ui.type==="concert"],
+   [days,"Days out",openDaysList,false],
+   [uniq,"Unique artists",openArtistDir,false],
+   [fests,"Different festivals",openFestList,false]].forEach(function(x){
+    var d=el("button","stat"+(x[3]?" on":""));d.type="button";d.appendChild(el("b",null,x[0]));d.appendChild(el("span",null,x[1]));d.onclick=x[2];st.appendChild(d);
   });
 
   // top artists
@@ -425,8 +478,10 @@ function render(){
   var main=$("main");main.textContent="";
   var q=norm(ui.q);
   var shown=years.filter(function(y){return ui.year==="all"||ui.year===y;});
+  ui._years=shown;
+  $("foldBtn").textContent=shown.some(function(y){return !ui.folded[y];})?"Fold all":"Unfold all";
   if(!shown.length){
-    var e=el("div","empty","Nothing here yet. Tap “+ Add show” to log your first one.");main.appendChild(e);return;
+    var e=el("div","empty",(ui.type||ui.fest)?"Nothing matches these filters.":"Nothing here yet. Tap “+ Add show” to log your first one.");main.appendChild(e);return;
   }
   var totalHits=0;
   shown.forEach(function(y){
@@ -435,16 +490,22 @@ function render(){
       var r=ui.sort==="az"?(a.s.festival.localeCompare(b.s.festival)||cmpNullLast(a.k,b.k,1)):cmpNullLast(a.k,b.k,ui.sort==="old"?1:-1);
       return r||a.i-b.i;
     }).map(function(o){return o.s;});
-    var head=el("div","yearhead");head.appendChild(el("h3",null,y));
+    var yHit=!!q&&shows.some(function(s){return s.days.some(function(d){return d.artists.some(function(a){return norm(a).indexOf(q)>-1;});});});
+    var isFolded=!!ui.folded[y]&&!yHit;
+    if(isFolded)block.classList.add("folded");
+    var head=el("div","yearhead");head.setAttribute("role","button");head.tabIndex=0;head.setAttribute("aria-expanded",String(!isFolded));
+    head.appendChild(el("span","chev",isFolded?"▸":"▾"));head.appendChild(el("h3",null,y));
+    (function(yy){var tg=function(){if(ui.folded[yy])delete ui.folded[yy];else ui.folded[yy]=true;saveFolded();render();};head.onclick=tg;head.onkeydown=function(ev){if(ev.key==="Enter"||ev.key===" "){ev.preventDefault();tg();}};})(y);
     var n=0;shows.forEach(function(s){s.days.forEach(function(d){n+=d.artists.length;});});
-    head.appendChild(el("small",null,shows.length+" event"+(shows.length>1?"s":"")+" · "+n+" sets"));
+    head.appendChild(el("small",null,shows.length+" event"+(shows.length>1?"s":"")+" · "+n+(n===1?" set":" sets")));
     block.appendChild(head);
+    if(isFolded){var chips=el("div","foldchips");shows.forEach(function(s){var c0=colorFor(s.festival);var ch=el("span","foldchip",s.festival+(s.weekend?" · "+s.weekend.replace("Weekend ","W"):""));ch.style.background=c0;chips.appendChild(ch);});block.appendChild(chips);}
     var board=el("div","board");
     shows.forEach(function(s){
       var c=colorFor(s.festival);
-      var col=el("div","col");
+      var col=el("div","col");col.setAttribute("data-showid",s.id);
       var h=el("div","col-head");h.style.background="linear-gradient(160deg,"+c+","+shade(c,-60)+")";
-      h.appendChild(el("h4",null,s.festival));if(s.weekend)h.appendChild(el("span","wkbadge",s.weekend));if(s.location)h.appendChild(el("p",null,s.location));
+      h.appendChild(el("h4",null,s.festival));if(typeOf(s)==="concert")h.appendChild(el("span","wkbadge","Concert"));if(s.weekend)h.appendChild(el("span","wkbadge",s.weekend));if(s.location)h.appendChild(el("p",null,s.location));
       var eb=el("button",null,"✎ Edit");eb.style.cssText="position:absolute;right:10px;top:10px;font-size:12px;font-weight:700;background:rgba(0,0,0,.3);padding:4px 10px;border-radius:999px";
       eb.onclick=function(){openEdit(s.id);};if(!ui.view)h.appendChild(eb);
       col.appendChild(h);
@@ -527,67 +588,119 @@ function openArtist(name){
 }
 
 /* add / edit */
+/* ---------- pickers ---------- */
+var MIN_YEAR=1996;
+var DAYN=["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
+var MONN=["January","February","March","April","May","June","July","August","September","October","November","December"];
+function pad2(n){return (n<10?"0":"")+n;}
+function typeOf(s){return s&&s.type==="concert"?"concert":"festival";}
+function yearSelect(sel,opts){
+  opts=opts||{};var s=el("select");
+  if(opts.unsure||opts.placeholder){var o=el("option",null,opts.unsure?"Not sure":opts.placeholder);o.value="";s.appendChild(o);}
+  var top=new Date().getFullYear()+1;
+  for(var y=top;y>=MIN_YEAR;y--){var oy=el("option",null,String(y));oy.value=String(y);s.appendChild(oy);}
+  if(sel&&(sel<MIN_YEAR||sel>top)){var ox=el("option",null,String(sel));ox.value=String(sel);s.appendChild(ox);}
+  s.value=sel?String(sel):"";return s;
+}
+function labelFromISO(v){
+  var m=/^(\d{4})-(\d{2})-(\d{2})$/.exec(v||"");if(!m)return "";
+  var d=new Date(+m[1],+m[2]-1,+m[3]);return DAYN[d.getDay()]+" "+MONN[d.getMonth()]+" "+d.getDate();
+}
+function isoFromLabel(label,year){
+  var k=dateKey(label);if(k==null||!year)return "";
+  return year+"-"+pad2(Math.floor(k/100))+"-"+pad2(k%100);
+}
+function dayPicker(initialLabel,year){
+  var wrap=el("div");
+  var di=el("input");di.type="date";wrap.appendChild(di);
+  var det=el("details");det.style.marginTop="6px";det.appendChild(el("summary","hint","Custom label (optional)"));
+  var txt=el("input");txt.placeholder="e.g. Friday, Weekend 1";det.appendChild(txt);wrap.appendChild(det);
+  var dirtyDate=false,dirtyText=false,initial=initialLabel||"",yr=year;
+  function constrain(){if(yr){di.min=yr+"-01-01";di.max=yr+"-12-31";}else{di.removeAttribute("min");di.removeAttribute("max");}}
+  function setLabel(l,yy){initial=l||"";if(yy)yr=yy;constrain();dirtyDate=false;dirtyText=false;txt.value=initial;di.value=isoFromLabel(initial,yr);}
+  di.onchange=function(){dirtyDate=true;if(!dirtyText)txt.value=labelFromISO(di.value);};
+  txt.oninput=function(){dirtyText=true;};
+  setLabel(initial,yr);
+  return {node:wrap,
+    setYear:function(yy){yr=yy;constrain();if(dirtyDate&&di.value&&yr)di.value=yr+di.value.slice(4);else if(!dirtyDate)di.value=isoFromLabel(initial,yr);},
+    setLabel:setLabel,
+    getLabel:function(){if(dirtyText)return txt.value.trim();if(dirtyDate&&di.value)return labelFromISO(di.value);return (initial||txt.value||"").trim();}};
+}
+
+/* add / edit */
 function openEdit(id,startDay){
   var existing=id?state.shows.filter(function(s){return s.id===id;})[0]:null;
   var box=el("div");
   box.appendChild(el("h2",null,existing?"Edit show":"Add a show"));
-  box.appendChild(el("p","sub",existing?"Pick which day to change below. You can also set the weekend, rename it, or delete it.":"One day at a time. Add more days later under the same festival."));
-
+  box.appendChild(el("p","sub",existing?"Pick which day to change below. You can also change the type or weekend, rename it, or delete it.":"One day at a time. Add more days later under the same festival."));
   function field(lbl,node){box.appendChild(el("label",null,lbl));box.appendChild(node);return node;}
+
+  var typeSel=field("Type",el("select"));
+  [["festival","Festival"],["concert","Concert / show"]].forEach(function(t){var o=el("option",null,t[1]);o.value=t[0];typeSel.appendChild(o);});
+  typeSel.value=existing?typeOf(existing):"festival";
+
   var dl=el("datalist");dl.id="festlist";
   Array.from(new Set(state.shows.map(function(s){return s.festival;}))).forEach(function(f){var o=el("option");o.value=f;dl.appendChild(o);});
   box.appendChild(dl);
 
   var fest=el("input");fest.setAttribute("list","festlist");fest.placeholder="e.g. Coachella";
-  var year=el("input");year.type="number";year.inputMode="numeric";year.value=existing?existing.year:new Date().getFullYear();
+  var ysel=yearSelect(existing?existing.year:new Date().getFullYear());
   var wrapRow=el("div","row");
   var left=el("div");left.appendChild(el("label",null,"Festival / show"));left.appendChild(fest);
-  var right=el("div");right.appendChild(el("label",null,"Year"));right.appendChild(year);
+  var right=el("div");right.appendChild(el("label",null,"Year"));right.appendChild(ysel);
   wrapRow.appendChild(left);wrapRow.appendChild(right);box.appendChild(wrapRow);
 
   var loc=field("Location (optional)",el("input"));loc.placeholder="Venue, City";
-  var wk=field("Weekend (only if the festival runs more than one)",el("select"));
-  ["","Weekend 1","Weekend 2","Weekend 3"].forEach(function(w){var o=el("option",null,w||"Not applicable");o.value=w;wk.appendChild(o);});
-  var dayLabel=field("Day",el("input"));dayLabel.placeholder="e.g. Friday April 20th";
-  var arts=field("Artists (one per line, or separate with commas)",el("textarea"));arts.rows=7;
-  arts.placeholder="Artist one\nArtist two\nArtist three";
+  var wkWrap=el("div");wkWrap.appendChild(el("label",null,"Weekend (only if the festival runs more than one)"));
+  var wk=el("select");["","Weekend 1","Weekend 2","Weekend 3"].forEach(function(w){var o=el("option",null,w||"Not applicable");o.value=w;wk.appendChild(o);});
+  wkWrap.appendChild(wk);box.appendChild(wkWrap);
+  function syncType(){wkWrap.style.display=typeSel.value==="concert"?"none":"";}typeSel.onchange=syncType;
+
+  var dp=dayPicker("",parseInt(ysel.value,10));
+  var arts=el("textarea");arts.rows=7;arts.placeholder="Artist one\nArtist two\nArtist three";
+  var origSel=null,sel=null;
+  if(existing){
+    fest.value=existing.festival;loc.value=existing.location||"";
+    if(existing.weekend){if(["Weekend 1","Weekend 2","Weekend 3"].indexOf(existing.weekend)<0){var oo=el("option",null,existing.weekend);oo.value=existing.weekend;wk.appendChild(oo);}wk.value=existing.weekend;}
+    box.appendChild(el("label",null,"Which day"));
+    sel=el("select");existing.days.forEach(function(d,i){var o=el("option",null,d.label);o.value=i;sel.appendChild(o);});
+    var o2=el("option",null,"+ Add another day");o2.value="new";sel.appendChild(o2);
+    box.appendChild(sel);origSel=sel;
+  }
+  box.appendChild(el("label",null,"Date"));box.appendChild(dp.node);
+  box.appendChild(el("label",null,"Artists (one per line, or separate with commas)"));box.appendChild(arts);
+  ysel.onchange=function(){dp.setYear(parseInt(ysel.value,10));};
+  if(existing){
+    var fill=function(){var y=parseInt(ysel.value,10);if(sel.value==="new"){dp.setLabel("",y);arts.value="";}else{var d=existing.days[+sel.value];dp.setLabel(d.label,y);arts.value=d.artists.join("\n");}};
+    sel.onchange=fill;if(startDay!=null&&startDay<existing.days.length)sel.value=String(startDay);fill();
+  }
+  syncType();
 
   box.appendChild(el("label",null,"Color"));
   var sw=el("div","swatches");var chosen=null;
   PAL().forEach(function(c,ci){var s=el("button","sw");s.style.background=c;s.onclick=function(){chosen=ci;Array.prototype.forEach.call(sw.children,function(x){x.classList.remove("on");});s.classList.add("on");};sw.appendChild(s);});
   box.appendChild(sw);
-
-  var dayIdx=0;
-  if(existing){
-    fest.value=existing.festival;loc.value=existing.location||"";
-    if(existing.weekend){if(["Weekend 1","Weekend 2","Weekend 3"].indexOf(existing.weekend)<0){var oo=el("option",null,existing.weekend);oo.value=existing.weekend;wk.appendChild(oo);}wk.value=existing.weekend;}
-    colorFor(existing.festival);var cv=state.colors[existing.festival];chosen=typeof cv==="number"?cv:null;
-    Array.prototype.forEach.call(sw.children,function(x,i){if(i===chosen)x.classList.add("on");});
-    // day picker
-    var sel=el("select");existing.days.forEach(function(d,i){var o=el("option",null,d.label);o.value=i;sel.appendChild(o);});
-    var o2=el("option",null,"+ Add another day");o2.value="new";sel.appendChild(o2);
-    sel.style.marginTop="6px";
-    var fill=function(){if(sel.value==="new"){dayLabel.value="";arts.value="";}else{var d=existing.days[+sel.value];dayLabel.value=d.label;arts.value=d.artists.join("\n");}};
-    sel.onchange=fill;if(startDay!=null&&startDay<existing.days.length)sel.value=String(startDay);fill();
-    box.insertBefore(el("label",null,"Which day"),dayLabel.previousSibling);
-    box.insertBefore(sel,dayLabel.previousSibling);
-    var origSel=sel;
-  }
+  if(existing){colorFor(existing.festival);var cv=state.colors[existing.festival];chosen=typeof cv==="number"?cv:null;
+    Array.prototype.forEach.call(sw.children,function(x,i){if(i===chosen)x.classList.add("on");});}
 
   var a=el("div","actions");
   var save_=el("button","btn primary",existing?"Save":"Add");
   var cancel=el("button","btn","Cancel");cancel.onclick=closeSheet;
   save_.onclick=function(){
-    var f=fest.value.trim(),y=parseInt(year.value,10),dl2=dayLabel.value.trim()||"Day 1";
+    var f=fest.value.trim(),y=parseInt(ysel.value,10),dl2=dp.getLabel()||"Day 1",typ=typeSel.value;
     var list=arts.value.split(/[\n,]+/).map(function(x){return x.trim();}).filter(Boolean);
     if(!f||!y){fest.style.borderColor="#ff7a8a";return;}
-    if(state.sample){state={sample:false,colors:{},shows:[]};}
+    if(state.sample){state={sample:false,title:state.title||"",colors:{},shows:[]};}
     if(chosen!=null)state.colors[f]=chosen;colorFor(f);
     var target=existing;
-    if(!target){target=state.shows.filter(function(s){return s.year===y&&norm(s.festival)===norm(f)&&norm(s.weekend||"")===norm(wk.value);})[0];}
+    var wv=typ==="festival"?wk.value:"";
+    if(!target&&typ==="festival"){target=state.shows.filter(function(s){return typeOf(s)==="festival"&&s.year===y&&norm(s.festival)===norm(f)&&norm(s.weekend||"")===norm(wv);})[0];}
     if(!target){target={id:uid(),year:y,festival:f,location:loc.value.trim(),days:[]};state.shows.push(target);}
-    target.year=y;target.festival=f;if(wk.value)target.weekend=wk.value;else delete target.weekend;if(loc.value.trim())target.location=loc.value.trim();
-    if(existing&&origSel&&origSel.value!=="new"){target.days[+origSel.value]={label:dl2,artists:list};}
+    target.year=y;target.festival=f;
+    if(typ==="concert")target.type="concert";else delete target.type;
+    if(wv)target.weekend=wv;else delete target.weekend;
+    if(loc.value.trim())target.location=loc.value.trim();
+    if(existing&&origSel&&origSel.value!=="new"){var i=+origSel.value,old=target.days[i];target.days[i]={label:dl2,artists:list};if(old&&old.meta)target.days[i].meta=old.meta;}
     else{var hit=target.days.filter(function(d){return norm(d.label)===norm(dl2);})[0];if(hit)hit.artists=list;else target.days.push({label:dl2,artists:list});}
     save();closeSheet();render();
   };
@@ -599,14 +712,14 @@ function openEdit(id,startDay){
       if(!existing.days.length){state.shows=state.shows.filter(function(s){return s!==existing;});}
       save();closeSheet();render();
     };
-    var delAll=el("button","btn danger","Delete entire festival entry");delAll.style.cssText="margin-top:8px;width:100%";
+    var delAll=el("button","btn danger","Delete this whole entry");delAll.style.cssText="margin-top:8px;width:100%";
     delAll.onclick=function(){state.shows=state.shows.filter(function(s){return s!==existing;});save();closeSheet();render();};
     box.appendChild(del);box.appendChild(delAll);
   }
   openSheet(box);
 }
 
-/* backup */
+/* backup / export */
 function csvCell(v){v=v==null?"":String(v);return /[",\n\r]/.test(v)?'"'+v.replace(/"/g,'""')+'"':v;}
 function downloadText(name,text,type){
   var blob=new Blob([text],{type:type});var u=URL.createObjectURL(blob);var l=document.createElement("a");
@@ -614,11 +727,11 @@ function downloadText(name,text,type){
 }
 function slug(){return (state.title||"show-history").toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"")||"show-history";}
 function exportSets(){
-  var rows=[["Year","Festival","Weekend","Location","Day","Artist","Note","Clip links"]];
+  var rows=[["Year","Type","Festival","Weekend","Location","Day","Artist","Note","Clip links"]];
   state.shows.slice().sort(function(a,b){return b.year-a.year||a.festival.localeCompare(b.festival)||String(a.weekend||"").localeCompare(String(b.weekend||""));}).forEach(function(s){
     s.days.forEach(function(d){d.artists.forEach(function(a){
       var m=d.meta&&d.meta[norm(a)];
-      rows.push([s.year,s.festival,s.weekend||"",s.location||"",d.label,a,m&&m.note||"",m&&m.clips?m.clips.join(" | "):""]);
+      rows.push([s.year,typeOf(s)==="concert"?"Concert":"Festival",s.festival,s.weekend||"",s.location||"",d.label,a,m&&m.note||"",m&&m.clips?m.clips.join(" | "):""]);
     });});
   });
   downloadText(slug()+"-sets.csv","\uFEFF"+rows.map(function(r){return r.map(csvCell).join(",");}).join("\r\n"),"text/csv;charset=utf-8");
@@ -651,7 +764,7 @@ function openBackup(){
     r.onload=function(){try{var d=JSON.parse(r.result);if(!d.shows||!Array.isArray(d.shows))throw 0;state=d;delete state.appVersion;state.colors=state.colors||{};state.sample=false;save();closeSheet();render();}catch(e){alert("That file doesn't look like a Show History backup.");}};
     r.readAsText(f);
   };
-  btn("Save backup file",function(){downloadText(slug()+"-backup.json",JSON.stringify(Object.assign({appVersion:APP_VERSION},state),null,2),"application/json");});
+  btn("Save backup file",function(){downloadText(slug()+"-backup.json",JSON.stringify(Object.assign({appVersion:APP_VERSION},state),null,2),"application/json");markBackup();});
   btn("Restore from backup file",function(){inp.click();});
   box.appendChild(inp);
   var close=el("button","btn","Close");close.style.cssText="width:100%;margin-top:18px";close.onclick=closeSheet;box.appendChild(close);
@@ -679,6 +792,7 @@ var FESTS=[
  {name:"Rolling Loud",location:"",aliases:["hip hop","rap"]},
  {name:"Glastonbury",location:"Pilton, UK",aliases:["glasto"]},
  {name:"Reading & Leeds",location:"UK",aliases:["reading","leeds"]},
+ {name:"Hard Summer",location:"",aliases:["hard","dance"]},
  {name:"Download Festival",location:"Donington Park, UK",aliases:["download","metal"]},
  {name:"Primavera Sound",location:"Barcelona, Spain",aliases:["primavera"]},
  {name:"Wacken Open Air",location:"Wacken, Germany",aliases:["wacken","metal"]},
@@ -689,31 +803,48 @@ var FESTS=[
 function toast(msg){var t=$("toast");t.textContent=msg;t.classList.add("on");clearTimeout(toast._t);toast._t=setTimeout(function(){t.classList.remove("on");},3200);}
 function backBtn(fn){var b=el("button","btn","Back");b.onclick=fn;return b;}
 
-function wizPick(q){
-  q=q||"";
+function wizPick(){
   var box=el("div");
   box.appendChild(el("h2",null,"Add a show"));
-  box.appendChild(el("p","sub","Pick the festival. Your AI fetches the lineup, then you tick who you saw."));
-  var inp=el("input");inp.type="search";inp.placeholder="Search festivals (Coachella, EDC, Lolla...)";inp.value=q;inp.autocomplete="off";inp.autocapitalize="off";box.appendChild(inp);
-  var list=el("div");list.style.marginTop="12px";box.appendChild(list);
-  function draw(){
-    list.textContent="";var s=norm(inp.value);
-    var hits=FESTS.filter(function(f){return !s||norm(f.name).indexOf(s)>-1||f.aliases.some(function(a){return a.indexOf(s)>-1;});});
-    hits.forEach(function(f){
-      var b=el("button","wizcard");b.appendChild(el("b",null,f.name));
-      if(f.location)b.appendChild(el("small",null,f.location));
-      b.onclick=function(){wizCustom(f.name,f.location);};list.appendChild(b);
-    });
-    var other=el("button","wizcard dashed");
-    var typed=inp.value.trim();
-    other.appendChild(el("b",null,typed&&!hits.length?"Add “"+typed+"”":"Not listed? Add any show"));
-    other.appendChild(el("small",null,"Any festival, concert or tour."));
-    other.onclick=function(){wizCustom(typed);};list.appendChild(other);
-  }
-  inp.oninput=draw;draw();
+  box.appendChild(el("p","sub","What kind of show was it?"));
+  var f=el("button","wizcard");f.appendChild(el("b",null,"Festival"));f.appendChild(el("small",null,"Pick it from the list. Your AI fetches the lineup, then you tick who you saw."));
+  f.onclick=function(){wizCustom();};box.appendChild(f);
+  var c=el("button","wizcard");c.appendChild(el("b",null,"Concert / show"));c.appendChild(el("small",null,"One artist's show or tour stop. Add the openers and the venue."));
+  c.onclick=function(){wizConcert();};box.appendChild(c);
   var a=el("div","actions");var m=el("button","btn","Use the manual form");m.onclick=function(){openEdit(null);};
-  var c=el("button","btn","Close");c.onclick=closeSheet;a.appendChild(m);a.appendChild(c);box.appendChild(a);
+  var x=el("button","btn","Close");x.onclick=closeSheet;a.appendChild(m);a.appendChild(x);box.appendChild(a);
   openSheet(box);
+}
+
+function wizConcert(){
+  var box=el("div");box.appendChild(el("h2",null,"Add a concert / show"));
+  box.appendChild(el("p","sub","Who did you see, where, and who opened?"));
+  box.appendChild(el("label",null,"Headliner"));var head=el("input");head.placeholder="e.g. Metallica";box.appendChild(head);
+  box.appendChild(el("label",null,"Tour or event name (optional)"));var tour=el("input");tour.placeholder="e.g. M72 World Tour";box.appendChild(tour);
+  box.appendChild(el("label",null,"Openers (one per line, or separate with commas)"));var op=el("textarea");op.rows=3;box.appendChild(op);
+  var row=el("div","row");
+  var l=el("div");l.appendChild(el("label",null,"Venue"));var ven=el("input");ven.placeholder="e.g. SoFi Stadium";l.appendChild(ven);
+  var r=el("div");r.appendChild(el("label",null,"City"));var city=el("input");city.placeholder="e.g. Inglewood, CA";r.appendChild(city);
+  row.appendChild(l);row.appendChild(r);box.appendChild(row);
+  box.appendChild(el("label",null,"Year"));var ys=yearSelect(new Date().getFullYear());box.appendChild(ys);
+  box.appendChild(el("label",null,"Date (optional)"));var dp=dayPicker("",parseInt(ys.value,10));box.appendChild(dp.node);
+  ys.onchange=function(){dp.setYear(parseInt(ys.value,10));};
+  var err=el("p","hint","");err.style.color="var(--danger)";box.appendChild(err);
+  var a=el("div","actions");a.appendChild(backBtn(function(){wizPick();}));
+  var go=el("button","btn primary","Save concert");
+  go.onclick=function(){
+    var h=head.value.trim(),y=parseInt(ys.value,10);
+    if(!h){head.style.borderColor="#ff5a7a";err.textContent="Add the headliner.";return;}
+    var title=tour.value.trim()||h;
+    var list=[h].concat(op.value.split(/[\n,]+/).map(function(x){return x.trim();}).filter(Boolean));
+    var loc=[ven.value.trim(),city.value.trim()].filter(Boolean).join(", ");
+    if(state.sample)state={sample:false,title:state.title||"",colors:{},shows:[]};
+    colorFor(title);
+    state.shows.push({id:uid(),year:y,festival:title,type:"concert",location:loc,days:[{label:dp.getLabel()||"Date unknown",artists:dedupeNames(list)}]});
+    save();closeSheet();render();
+    toast((storageOK?"Saved ":"Added, but NOT saved in this browser: ")+title+" "+y);
+  };
+  a.appendChild(go);box.appendChild(a);openSheet(box);
 }
 
 function cleanName(x){return String(x||"").replace(/[*_`#>]+/g,"").replace(/^["'“”]+|["'“”]+$/g,"").replace(/\s+/g," ").trim();}
@@ -755,16 +886,20 @@ function parseAIAnswer(txt){
   days=days.map(function(d){d.artists=dedupeNames(d.artists);return d;}).filter(function(d){return d.artists.length;});
   return days.length?{days:days,meta:{},multi:null}:null;
 }
-function aiPrompt(name,year,loc,wk,when){
-  var both=wk==="both";
-  var who=name+" "+year+(wk&&!both?" ("+wk+")":"")+(loc?", "+loc:"");
+function aiPrompt(name,year,loc,wk,when,memo){
+  var both=wk==="both",unsure=!year;
+  var who=name+(unsure?" (year unknown)":" "+year)+(wk&&!both?" ("+wk+")":"")+(loc?", "+loc:"");
   var went="";
   if(both)went="\n\nThis festival ran more than one weekend and I went to ALL of them. Give each weekend's real calendar dates"+(when?" (I went "+when+")":"")+". If an act played only one weekend, mark it with that weekend's number.";
   else if(wk||when)went="\n\nI went to "+(wk||"this edition")+(when?" ("+when+")":"")+", so use that weekend's real calendar dates in the day labels"+(wk?" and leave out acts that only played the other weekend":"")+".";
+  var yrNote=unsure?"\n\nI don't remember which year I went. Work out the most likely year from my details, use that year's lineup, and say how confident you are. If it's ambiguous, give your best guess and list the other possible years.":"";
+  var memoNote=memo?"\n\nWhat I remember: "+memo+"\nUse that to work out the right edition, and list the acts from the lineup that fit what I remember under \"matches\".":"";
+  var yp=unsure?"\"year\":2019,\"yearAlternatives\":[2018],\"yearConfidence\":\"high, medium or low\",\"yearNote\":\"one line on why\"":"\"year\":"+year;
+  var mp=memo?",\"matches\":[\"Artist that fits what I remember\"]":"";
   var fmt=both
-    ?"{\"festival\":\""+name+"\",\"year\":"+year+",\"location\":\"City, State/Country\",\"weekends\":[\"Weekend 1\",\"Weekend 2\"],\"days\":[{\"label\":\"Friday\",\"dates\":[\"Friday April 11\",\"Friday April 18\"],\"artists\":[\"Artist One\",{\"name\":\"Artist Two\",\"weekend\":1}]}]}"
-    :"{\"festival\":\""+name+"\",\"year\":"+year+",\"weekend\":\""+(wk||"")+"\",\"location\":\"City, State/Country\",\"days\":[{\"label\":\"Friday April 11\",\"artists\":[\"Artist One\",\"Artist Two\"]}]}";
-  return "I'm logging festivals I've been to. Please search the web and give me the lineup for "+who+", grouped by day."+went+"\n\n"+
+    ?"{\"festival\":\""+name+"\","+yp+",\"location\":\"City, State/Country\",\"weekends\":[\"Weekend 1\",\"Weekend 2\"],\"days\":[{\"label\":\"Friday\",\"dates\":[\"Friday April 11\",\"Friday April 18\"],\"artists\":[\"Artist One\",{\"name\":\"Artist Two\",\"weekend\":1}]}]"+mp+"}"
+    :"{\"festival\":\""+name+"\","+yp+",\"weekend\":\""+(wk||"")+"\",\"location\":\"City, State/Country\",\"days\":[{\"label\":\"Friday April 11\",\"artists\":[\"Artist One\",\"Artist Two\"]}]"+mp+"}";
+  return "I'm logging festivals I've been to. Please search the web and give me the lineup for "+who+", grouped by day."+yrNote+went+memoNote+"\n\n"+
   "Reply with ONLY one JSON code block in exactly this format:\n"+fmt+"\n\n"+
   "Rules: use each performer's name exactly as printed, one entry per act, include every stage. Label each day with the weekday"+(both?"":" and date")+". If the daily split wasn't published, use one day labeled with the date range. If you're unsure about a name, leave it out and tell me after the JSON.";
 }
@@ -775,12 +910,28 @@ function copyText(txt,done){
 }
 
 function wizCustom(name,loc){
-  var box=el("div");box.appendChild(el("h2",null,name?name:"Add a show"));
-  box.appendChild(el("p","sub","Your AI fetches the current lineup. Then you tick who you saw."));
-  var fest=el("input");fest.value=name||"";fest.placeholder="Festival or show name";
-  var year=el("input");year.type="number";year.inputMode="numeric";year.value=new Date().getFullYear();var yearTouched=false;year.oninput=function(){yearTouched=true;};
-  var row=el("div","row");var l=el("div");l.appendChild(el("label",null,"Name"));l.appendChild(fest);var r=el("div");r.appendChild(el("label",null,"Year"));r.appendChild(year);row.appendChild(l);row.appendChild(r);box.appendChild(row);
-  box.appendChild(el("label",null,"Location (optional)"));var loc_=el("input");loc_.value=loc||"";box.appendChild(loc_);
+  var box=el("div");box.appendChild(el("h2",null,"Add a festival"));
+  box.appendChild(el("p","sub","Pick the festival. Your AI fetches the lineup, then you tick who you saw."));
+  var known=FESTS.filter(function(f){return norm(f.name)===norm(name||"");})[0];
+  var fsel=el("select");
+  var o0=el("option",null,"Choose a festival…");o0.value="";fsel.appendChild(o0);
+  FESTS.slice().sort(function(a,b){return a.name.localeCompare(b.name);}).forEach(function(f){var o=el("option",null,f.name);o.value=f.name;fsel.appendChild(o);});
+  var oo=el("option",null,"Other (type your own)");oo.value="__other";fsel.appendChild(oo);
+  var fest=el("input");fest.placeholder="Festival name";fest.style.marginTop="8px";
+  var loc_=el("input");var locTouched=!!loc;loc_.value=loc||"";loc_.oninput=function(){locTouched=true;};
+  function sync(){
+    var v=fsel.value;fest.style.display=v==="__other"?"":"none";
+    if(v&&v!=="__other"){fest.value=v;var f=FESTS.filter(function(x){return x.name===v;})[0];if(f&&!locTouched)loc_.value=f.location||"";}
+    fsel.style.borderColor="";
+  }
+  if(known){fsel.value=known.name;}else if(name){fsel.value="__other";fest.value=name;}
+  fest.value=fest.value||(known?known.name:"");
+  fsel.onchange=sync;
+  box.appendChild(el("label",null,"Festival"));box.appendChild(fsel);box.appendChild(fest);
+  box.appendChild(el("label",null,"Year"));
+  var ysel=yearSelect(new Date().getFullYear(),{unsure:true});var yearTouched=false;box.appendChild(ysel);
+  var yhint=el("p","hint","Not sure? Choose “Not sure” and describe what you remember below. Your AI will help work out the year.");yhint.style.display="none";box.appendChild(yhint);
+  box.appendChild(el("label",null,"Location (optional)"));box.appendChild(loc_);
   box.appendChild(el("label",null,"Weekend (only if the festival runs more than one)"));
   var wkSel=el("select");[["","Not applicable"],["Weekend 1","Weekend 1"],["Weekend 2","Weekend 2"],["Weekend 3","Weekend 3"],["both","Both weekends (saves to each)"]].forEach(function(w){var o=el("option",null,w[1]);o.value=w[0];wkSel.appendChild(o);});box.appendChild(wkSel);
   box.appendChild(el("label",null,"Dates you went (optional)"));
@@ -789,9 +940,13 @@ function wizCustom(name,loc){
   var ai=el("div","aibox");
   ai.appendChild(el("b",null,"Ask your AI for the lineup"));
   ai.appendChild(el("p","hint","1. Copy the prompt and send it to Claude, ChatGPT or Gemini.  2. Paste its answer below."));
-  var btns=el("div","aibtns");
+  ai.appendChild(el("label",null,"What do you remember? (optional)"));
+  var memo=el("textarea");memo.rows=3;memo.placeholder="Any details help: artists you saw, who headlined, the weather, who you went with, rough dates…";ai.appendChild(memo);
+  var btns=el("div","aibtns");btns.style.marginTop="10px";
   var promptBox=el("textarea");promptBox.rows=6;promptBox.readOnly=true;promptBox.style.display="none";promptBox.style.marginTop="10px";
-  function current(){var n=fest.value.trim();if(!n){fest.style.borderColor="#ff5a7a";fest.focus();return null;}fest.style.borderColor="";return aiPrompt(n,parseInt(year.value,10)||new Date().getFullYear(),loc_.value.trim(),wkSel.value,when.value.trim());}
+  function nameVal(){var v=fsel.value;if(!v){fsel.style.borderColor="#ff5a7a";fsel.focus();return "";}
+    if(v==="__other"){var n=fest.value.trim();if(!n){fest.style.borderColor="#ff5a7a";fest.focus();return "";}fest.style.borderColor="";return n;}return v;}
+  function current(){var n=nameVal();if(!n)return null;return aiPrompt(n,parseInt(ysel.value,10)||null,loc_.value.trim(),wkSel.value,when.value.trim(),memo.value.trim());}
   var cp=el("button","btn primary","Copy prompt");
   cp.onclick=function(){var p=current();if(!p)return;promptBox.value=p;promptBox.style.display="";copyText(p,function(ok){cp.textContent=ok?"Copied!":"Copy it below";setTimeout(function(){cp.textContent="Copy prompt";},2500);});};
   btns.appendChild(cp);
@@ -806,46 +961,54 @@ function wizCustom(name,loc){
 
   var more=el("details");more.style.marginTop="10px";
   more.appendChild(el("summary","hint","Or type a lineup yourself"));
-  more.appendChild(el("label",null,"Day"));var dl=el("input");dl.placeholder="e.g. Friday June 20";more.appendChild(dl);
+  more.appendChild(el("label",null,"Date"));var dp=dayPicker("",parseInt(ysel.value,10));more.appendChild(dp.node);
+  ysel.onchange=function(){yearTouched=true;dp.setYear(parseInt(ysel.value,10));yhint.style.display=ysel.value?"none":"";};
   more.appendChild(el("label",null,"Lineup (one per line, or separated by commas)"));
   var ta=el("textarea");ta.rows=6;ta.placeholder="Artist one\nArtist two\nArtist three";more.appendChild(ta);
   box.appendChild(more);
   var err=el("p","hint","");err.style.color="var(--danger)";box.appendChild(err);
-  var a=el("div","actions");a.appendChild(backBtn(function(){wizPick(name);}));
+  var a=el("div","actions");a.appendChild(backBtn(function(){wizPick();}));
   var go=el("button","btn primary","Next: tick who you saw");
   go.onclick=function(){
     err.textContent="";
-    var n=fest.value.trim(),y=parseInt(year.value,10);
-    if(!n||!y){fest.style.borderColor="#ff5a7a";return;}
-    var days=null,locOut=loc_.value.trim(),wkOut=wkSel.value,multi=null;
+    var n=nameVal();if(!n)return;
+    var y=parseInt(ysel.value,10)||null,unsure=!y;
+    var days=null,locOut=loc_.value.trim(),wkOut=wkSel.value,multi=null,meta={};
     if(ans.value.trim()){
       var parsed=parseAIAnswer(ans.value);
       if(!parsed){err.textContent="I couldn't find any artists in that answer. Ask the AI for the JSON format again, or type the lineup under “Or type a lineup yourself.”";return;}
-      days=parsed.days;multi=parsed.multi;
-      if(!yearTouched&&parsed.meta&&parseInt(parsed.meta.year,10)>1950&&parseInt(parsed.meta.year,10)<2100)y=parseInt(parsed.meta.year,10);
-      if(!locOut&&parsed.meta&&parsed.meta.location)locOut=String(parsed.meta.location).slice(0,80);
-      if(!multi&&!wkOut&&parsed.meta&&/^weekend\s*\d/i.test(String(parsed.meta.weekend||"")))wkOut="Weekend "+String(parsed.meta.weekend).match(/\d+/)[0];
+      days=parsed.days;multi=parsed.multi;meta=parsed.meta||{};
+      var my=parseInt(meta.year,10),okY=my>1950&&my<2100;
+      if(okY&&(!y||!yearTouched))y=my;
+      if(!locOut&&meta.location)locOut=String(meta.location).slice(0,80);
+      if(!multi&&!wkOut&&/^weekend\s*\d/i.test(String(meta.weekend||"")))wkOut="Weekend "+String(meta.weekend).match(/\d+/)[0];
     }else{
       var list=ta.value.split(/[\n,]+/).map(function(x){return x.trim();}).filter(Boolean);
       if(!list.length){err.textContent="Paste your AI's answer above, or type a lineup.";more.open=true;ta.style.borderColor="#ff5a7a";return;}
+      if(!y){err.textContent="Pick a year for a typed lineup, or paste your AI's answer so it can work out the year.";return;}
       if(wkOut==="both"){err.textContent="For both weekends, use the AI prompt above. For a typed lineup, pick one weekend.";return;}
-      days=[{name:dl.value.trim()||"Day 1",artists:list}];
+      days=[{name:dp.getLabel()||"Day 1",artists:list}];
     }
     var F={name:n,location:locOut};
+    var extra={unsure:unsure,matches:(Array.isArray(meta.matches)?meta.matches:[]).map(cleanName).filter(Boolean),
+      alts:(Array.isArray(meta.yearAlternatives)?meta.yearAlternatives:[]).map(function(v){return parseInt(v,10);}).filter(function(v){return v>1950&&v<2100&&v!==y;}),
+      conf:cleanName(meta.yearConfidence||""),ynote:cleanName(meta.yearNote||"")};
     if(multi){
       var ws=multi.map(function(lab,i){return {label:lab,dates:days.map(function(d){return (d.dates&&d.dates[i])||d.name;})};});
       var pickIdx=-1,m=/^Weekend (\d)$/.exec(wkOut);if(m&&+m[1]<=ws.length)pickIdx=+m[1]-1;
-      wizCheck(F,{year:y,custom:true,weekends:ws,days:days.map(function(d){return {name:d.name,artists:d.artists};})},pickIdx);
+      wizCheck(F,Object.assign({year:y,custom:true,weekends:ws,days:days.map(function(d){return {name:d.name,artists:d.artists};})},extra),pickIdx);
       return;
     }
     if(wkOut==="both"){err.textContent="Your AI answered for a single weekend. Ask again with the prompt above, or pick one weekend.";return;}
-    wizCheck(F,{year:y,custom:true,weekend:wkOut,weekends:[{label:"",dates:days.map(function(d){return d.name;})}],days:days},0);
+    wizCheck(F,Object.assign({year:y,custom:true,weekend:wkOut,weekends:[{label:"",dates:days.map(function(d){return d.name;})}],days:days},extra),0);
   };
   a.appendChild(go);box.appendChild(a);openSheet(box);
+  sync();
 }
 
 function wizCheck(f,e,wk){
-  var both=wk<0,weekendNo=wk+1;
+  var both=wk<0,weekendNo=wk+1,curYear=e.year||null;
+  var matchSet={};(e.matches||[]).forEach(function(m){matchSet[norm(m)]=1;});
   var wkLabel=both?"Both weekends":(e.weekends.length>1?e.weekends[wk].label:(e.weekend||""));
   var tags=[];
   var days=e.days.map(function(d){
@@ -856,14 +1019,25 @@ function wizCheck(f,e,wk){
   var dates=e.weekends[both?0:wk].dates;
   var sel={};  // "di|key" -> true
   var box=el("div");
-  box.appendChild(el("h2",null,f.name+" "+e.year+(wkLabel?" · "+wkLabel:"")));
+  var h2=el("h2");box.appendChild(h2);
+  function setTitle(){h2.textContent=f.name+(curYear?" "+curYear:"")+(wkLabel?" · "+wkLabel:"");}setTitle();
   box.appendChild(el("p","sub","Tap everyone you saw."));
+  if(e.unsure||!curYear){
+    var yb=el("div","aibox");yb.style.margin="10px 0";
+    yb.appendChild(el("b",null,curYear?"Is this the right year?":"Which year was it?"));
+    var ys2=yearSelect(curYear,{placeholder:"Pick a year"});ys2.style.marginTop="8px";yb.appendChild(ys2);
+    var bits=[];if(e.conf)bits.push("Confidence: "+e.conf+".");if(e.alts&&e.alts.length)bits.push("Other possible years: "+e.alts.join(", ")+".");if(e.ynote)bits.push(e.ynote);
+    if(bits.length)yb.appendChild(el("p","hint",bits.join(" ")));
+    ys2.onchange=function(){curYear=parseInt(ys2.value,10)||null;setTitle();upd();};
+    box.appendChild(yb);
+  }
   if(e.note||e.partial)box.appendChild(el("p","hint",(e.note||"")+(e.partial?" Add anyone we missed under each day.":"")));
   var find=el("input");find.type="search";find.placeholder="Filter artists...";find.autocomplete="off";find.autocapitalize="off";find.style.margin="6px 0 4px";box.appendChild(find);
+  if(Object.keys(matchSet).length)box.appendChild(el("p","hint","★ = possible match for what you remembered. Nothing is ticked for you."));
   var holder=el("div");box.appendChild(holder);
   var count=el("span");
   function total(){return Object.keys(sel).length;}
-  function upd(){count.textContent=total();save_.disabled=!total();}
+  function upd(){count.textContent=total();save_.disabled=!total()||!curYear;}
   function key(di,n){return di+"|"+norm(n);}
   var sections=[];
   function buildDay(di){
@@ -875,7 +1049,7 @@ function wizCheck(f,e,wk){
     if(e.partial&&d.name)sec.appendChild(el("div","hint",d.name));
     var grid=el("div","picks");sec.appendChild(grid);
     function addPick(n,on){
-      var tg_=both&&tags[di]&&tags[di][norm(n)];var b=el("button","pick"+(on?" on":""),n+(tg_?" · W"+tg_+" only":""));b.setAttribute("data-n",norm(n));
+      var tg_=both&&tags[di]&&tags[di][norm(n)];var mt_=matchSet[norm(n)];var b=el("button","pick"+(on?" on":"")+(mt_?" match":""),(mt_?"★ ":"")+n+(tg_?" · W"+tg_+" only":""));b.setAttribute("data-n",norm(n));
       b.onclick=function(){var k=key(di,n);if(sel[k]){delete sel[k];b.classList.remove("on");}else{sel[k]=true;b.classList.add("on");}upd();};
       grid.appendChild(b);return b;
     }
@@ -903,11 +1077,11 @@ function wizCheck(f,e,wk){
   if(e.custom&&!both&&e.weekends.length===1){
     var more=el("button","wizcard dashed");more.appendChild(el("b",null,"+ Add another day"));more.style.marginTop="12px";
     more.onclick=function(){
-      var m=el("div","wizday");m.appendChild(el("label",null,"Day"));var di_=el("input");di_.placeholder="e.g. Saturday June 21";m.appendChild(di_);
+      var m=el("div","wizday");m.appendChild(el("label",null,"Date"));var dpk=dayPicker("",curYear);m.appendChild(dpk.node);
       m.appendChild(el("label",null,"Lineup"));var t2=el("textarea");t2.rows=5;m.appendChild(t2);
       var ok=el("button","btn primary","Add day");ok.style.marginTop="10px";
       ok.onclick=function(){var list=t2.value.split(/[\n,]+/).map(function(x){return x.trim();}).filter(Boolean);if(!list.length)return;
-        var lab=di_.value.trim()||"Day "+(days.length+1);days.push({name:lab,artists:list});dates.push(lab);m.remove();buildDay(days.length-1);};
+        var lab=dpk.getLabel()||"Day "+(days.length+1);days.push({name:lab,artists:list});dates.push(lab);m.remove();buildDay(days.length-1);};
       m.appendChild(ok);more.parentNode.insertBefore(m,more);more.style.display="none";
       ok.addEventListener("click",function(){more.style.display="";});
     };
@@ -920,8 +1094,8 @@ function wizCheck(f,e,wk){
   function saveWeekend(w){
     var wl=e.weekends.length>1?e.weekends[w].label:(e.weekend||"");
     var dts=e.weekends[w].dates;
-    var target=state.shows.filter(function(s){return s.year===e.year&&norm(s.festival)===norm(f.name)&&norm(s.weekend||"")===norm(wl);})[0];
-    if(!target){target={id:uid(),year:e.year,festival:f.name,location:f.location||"",days:[]};if(wl)target.weekend=wl;state.shows.push(target);}
+    var target=state.shows.filter(function(s){return s.year===curYear&&typeOf(s)==="festival"&&norm(s.festival)===norm(f.name)&&norm(s.weekend||"")===norm(wl);})[0];
+    if(!target){target={id:uid(),year:curYear,festival:f.name,location:f.location||"",days:[]};if(wl)target.weekend=wl;state.shows.push(target);}
     days.forEach(function(d,di){
       var picked=d.artists.filter(function(a){var t=tags[di][norm(a)];return sel[key(di,a)]&&(t==null||!both||t===w+1);});
       if(!picked.length)return;
@@ -932,17 +1106,64 @@ function wizCheck(f,e,wk){
     });
   }
   save_.onclick=function(){
-    if(!total())return;
+    if(!total()||!curYear)return;
     if(state.sample)state={sample:false,title:state.title||"",colors:{},shows:[]};
     colorFor(f.name);
     var idxs=both?e.weekends.map(function(_,i){return i;}):[wk];
     idxs.forEach(saveWeekend);
     var n=total();
     save();closeSheet();render();
-    toast("Saved "+n+" artist"+(n===1?"":"s")+" to "+f.name+" "+e.year+(wkLabel?" ("+wkLabel.toLowerCase()+")":""));
+    toast((storageOK?"Saved ":"Added, but NOT saved in this browser: ")+n+" artist"+(n===1?"":"s")+" to "+f.name+" "+curYear+(wkLabel?" ("+wkLabel.toLowerCase()+")":""));
   };
   foot.appendChild(save_);box.appendChild(foot);
   upd();openSheet(box);
+}
+
+/* ---------- stat drill-downs ---------- */
+function toggleType(t){ui.type=ui.type===t?"":t;render();}
+function jumpTo(id){
+  var s=state.shows.filter(function(x){return x.id===id;})[0];if(!s)return;
+  ui.year=s.year;ui.q="";ui.fest="";ui.type="";$("q").value="";delete ui.folded[s.year];saveFolded();closeSheet();render();
+  setTimeout(function(){var c=document.querySelector('[data-showid="'+id+'"]');if(!c)return;
+    try{c.scrollIntoView({behavior:"smooth",block:"center",inline:"center"});}catch(e){c.scrollIntoView();}
+    c.classList.add("flash");setTimeout(function(){c.classList.remove("flash");},1800);},60);
+}
+function listSheet(title,sub,rows,searchable){
+  var box=el("div");box.appendChild(el("h2",null,title));if(sub)box.appendChild(el("p","sub",sub));
+  var inp=null;if(searchable){inp=el("input");inp.type="search";inp.placeholder="Search...";inp.autocomplete="off";inp.autocapitalize="off";box.appendChild(inp);}
+  var holder=el("div");holder.style.marginTop="8px";box.appendChild(holder);
+  function draw(){
+    holder.textContent="";var s=inp?norm(inp.value):"",lastG=null,n=0;
+    rows.forEach(function(r){
+      if(s&&norm(r.text+" "+(r.side||"")).indexOf(s)<0)return;n++;
+      if(r.group!=null&&r.group!==lastG){lastG=r.group;var g=el("div","hint",String(r.group));g.style.cssText="margin:14px 0 2px;text-transform:uppercase;letter-spacing:.1em;font-weight:700";holder.appendChild(g);}
+      var b=el("button","listrow");b.appendChild(el("span",null,r.text));if(r.side)b.appendChild(el("small",null,r.side));b.onclick=r.fn;holder.appendChild(b);
+    });
+    if(!n)holder.appendChild(el("p","hint","No matches."));
+  }
+  if(inp)inp.oninput=draw;draw();
+  var a=el("div","actions");var c=el("button","btn","Close");c.onclick=closeSheet;a.appendChild(c);box.appendChild(a);openSheet(box);
+}
+function openDaysList(){
+  var rows=[];state.shows.forEach(function(s){s.days.forEach(function(d){rows.push({y:s.year,k:dateKey(d.label),s:s,d:d});});});
+  var dir=ui.sort==="old"?1:-1;
+  rows.sort(function(a,b){return (a.y-b.y)*dir||cmpNullLast(a.k,b.k,dir)||a.s.festival.localeCompare(b.s.festival);});
+  listSheet("Days out","Every day you were at a show. Tap one to jump to it.",rows.map(function(r){
+    return {group:r.y,text:r.d.label+" · "+r.s.festival+(r.s.weekend?" ("+r.s.weekend+")":""),side:r.d.artists.length+" sets",fn:function(){jumpTo(r.s.id);}};
+  }),true);
+}
+function openArtistDir(){
+  var map=allSets();
+  var rows=Object.keys(map).map(function(k){return map[k];}).sort(function(a,b){return a.name.localeCompare(b.name);}).map(function(a){
+    return {text:a.name,side:"×"+a.list.length,fn:function(){openArtist(a.name);}};
+  });
+  listSheet("Unique artists","Everyone you've seen, A–Z. Tap a name to see every time.",rows,true);
+}
+function openFestList(){
+  var cnt={},label={};
+  state.shows.forEach(function(s){if(typeOf(s)!=="festival")return;var k=norm(s.festival);cnt[k]=(cnt[k]||0)+1;label[k]=label[k]||s.festival;});
+  var rows=Object.keys(cnt).sort().map(function(k){return {text:label[k],side:cnt[k]+(cnt[k]===1?" time":" times"),fn:function(){ui.fest=label[k];ui.type="";ui.year="all";closeSheet();render();}};});
+  listSheet("Different festivals","Tap one to show only that festival.",rows,rows.length>8);
 }
 
 /* wire up */
@@ -951,6 +1172,8 @@ $("menuBtn").onclick=openBackup;
 $("q").oninput=function(e){ui.q=e.target.value;render();};
 $("sortSel").onchange=function(e){ui.sort=e.target.value;try{localStorage.setItem("showHistory.sort",ui.sort);}catch(er){}render();};
 $("festSel").onchange=function(e){ui.fest=e.target.value;render();};
+$("typeSel").onchange=function(e){ui.type=e.target.value;render();};
+$("foldBtn").onclick=function(){var ys=ui._years||[];var anyOpen=ys.some(function(y){return !ui.folded[y];});ys.forEach(function(y){if(anyOpen)ui.folded[y]=true;else delete ui.folded[y];});saveFolded();render();};
 $("clearSample").onclick=function(){state={sample:false,title:state.title||"",colors:{},shows:[]};save();render();};
 document.addEventListener("keydown",function(e){if(e.key==="Escape")closeSheet();});
 
