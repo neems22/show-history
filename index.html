@@ -265,7 +265,7 @@ label{display:block;font-size:12px;letter-spacing:.1em;text-transform:uppercase;
 (function(){
 "use strict";
 var KEY="showHistory.v1";
-var APP_VERSION="1.0",APP_DATE="November 2026";
+var APP_VERSION="1.1",APP_DATE="November 2026";
 var THEMES={
  neon:{name:"Neon",tag:"Dark with glow. The original.",bg:"#07070d",fg:"#f2f2f8",palette:["#7c3aed","#2563eb","#0891b2","#059669","#65a30d","#ca8a04","#ea580c","#dc2626","#db2777","#c026d3","#4f46e5","#0d9488"]},
  metal:{name:"Heavy Metal",tag:"Black, blood red and steel.",bg:"#080808",fg:"#ebe6de",palette:["#9b0f0f","#c01818","#5c606a","#7b8089","#3d4148","#a1582a","#6e1f1f","#8a8372","#4a4e56","#933a16","#2f3136","#7d1d3a"]},
@@ -631,7 +631,32 @@ function openBackup(){
 
 /*WIZ*/
 /* ---------- lineup wizard ---------- */
-var CATALOG=[{"id": "coachella", "name": "Coachella", "aliases": ["coachella valley", "indio"], "location": "Empire Polo Club, Indio, CA", "editions": [{"year": 2026, "weekends": [{"label": "Weekend 1", "dates": ["Friday April 10", "Saturday April 11", "Sunday April 12"]}, {"label": "Weekend 2", "dates": ["Friday April 17", "Saturday April 18", "Sunday April 19"]}], "days": [{"name": "Friday", "artists": ["Sabrina Carpenter", "The xx", "Anyma", "Teddy Swims", "Record Safari", "Disclosure", "Turnstile", "Dijon", "Lykke Li", "Tiffany Tyson", "Dabeull", "Central Cee", "Devo", "Ethel Cain", "Moby", "Blood Orange", "Slayyyter", "BINI", "Novasoul", "Sexyy Red", "KATSEYE", "Levity", "Hugel", "Marlon Hoffstadt", "Swae Lee", "Massio", "Youna", "Creepy Nuts", "Joyce Manor", "CMAT", "fakemink", "Holly Humberstone", "Joost", "NewDad", "Cahuilla Bird Singers and Dancers", "Bob Baker Marionettes", "Wednesday", "Hot Mulligan", "Fleshwater", "Ninajirachi", "The Two Lips", "Carolina Durante", "Febuary", "Doom Dave", "Cachirula & Loojan", "Not For Radio", "Groove Armada", "Kettama", "Prospa", "Gordo", "Max Styler", "Max Dean x Luke Dean", "Jessica Brankka", "Arodes", "Rossi x Chloé Caillet", "Sahar Z", "Deep Dish", "Tiga", "Pawsa"]}, {"name": "Saturday", "artists": ["Justin Bieber", "The Strokes", "Giveon", "Addison Rae", "Jaqck Glam", "Labrinth", "David Byrne", "Sombr", "Alex G", "Blondshell", "Los Hermanos Flores", ["Jack White", 1], ["Kacey Musgraves", 2], "Interpol", "Royel Otis", "Fujii Kaze", "Taemin", "PinkPantheress", "Nine Inch Noize", "Rezz", "Adriatique", "Worship", "Hamdi", "Zulan", "Seek-One", "Teed", "Yousuke Yukimatsu", "Davido", "Geese", "Luísa Sonza", "BIA", "Morat", "Noga Erez", "Whatmore", "Boys Noize", "Armin van Buuren x Adam Beyer", "Bedouin", "Mahmut Orhan", "Riordan", "Sosa", "Ben Sterling", "Genesi", "Yamagucci", "Ceremony", "Rusowsky", "54 Ultra", "Die Spitz", "Freak Slug", "Ecca Vandal", "Mind Enterprises", "Triste Juventud", "David Guetta", "Afrojack x Shimza", "Joezi"]}, {"name": "Sunday", "artists": ["Karol G", "Young Thug", "Major Lazer", "Wet Leg", "Gabe Real", "Tijuana Panthers", "Clipse", "Foster the People", "Laufey", "BIGBANG", "Gigi Perez", "Juicewon", "Iggy Pop", "FKA twigs", "Little Simz", "Suicidal Tendencies", "Samia", "Wyldeflower", "Kaskade", "Subtronics", "Mochakk", "Duke Dumont", "BUNT.", "Loboman", "Girl Math (Vnssa x Nala)", "Black Flag", "The Chats", "Oklou", "The Rapture", "COBRAH", "Tomora", "flowerovlove", "Röyksopp", "WhoMadeWho", "Green Velvet x AYYBO", "Carlita x Josh Baker", "&friends", "MËSTIZA", "AZZECCA", "Le Yora", "Jane Remover", "DRAIN", "Model/Actriz", "French Police", "Los Retros", "RØZ", "Glitterer", "Panda & Chok", "Fatboy Slim", "Jazzy", "Joy (Anonymous)"]}], "source": "https://www.fzine.com/culture/coachella-2026-lineup-schedule", "note": "Built from the weekend 1 schedule. A couple of weekend-specific guests are tagged."}, {"year": 2025, "weekends": [{"label": "Weekend 1", "dates": ["Friday April 11", "Saturday April 12", "Sunday April 13"]}, {"label": "Weekend 2", "dates": ["Friday April 18", "Saturday April 19", "Sunday April 20"]}], "days": [{"name": "Friday", "artists": ["Lady Gaga", "Missy Elliott", "Benson Boone", "Marina", "Thee Sacred Souls", "Gabe Real", "Parcels", "The Marías", "Tyla", "The Go-Go's", "Seun Kuti & Egypt 80", "Tiffany Tyson", "The Prodigy", "Miike Snow", "Eyedress", "Djo", "Lola Young", "Saint Jhn", "Ravyn Lenae", "Mustard", "GloRilla", "Yeat", "Lisa", "Sara Landry", "Three 6 Mafia", "Chris Lorenzo", "Austin Millz", "Massio", "Indo Warehouse", "Ca7riel & Paco Amoroso", "Artemas", "A. G. Cook", "D4vd", "4batz", "Maribou State", "Parisi", "Saison", "HiTech", "Speed", "Los Mirlos", "Kneecap", "Julie", "Tops", "Vs Self", "Glixen", "Doom Dave"]}, {"name": "Saturday", "artists": ["Travis Scott", "Green Day", "Charli XCX", "T-Pain", "Jimmy Eat World", "Skrause", "The Original Misfits", "Above & Beyond", "Clairo", "Gustavo Dudamel & LA Phil", "Japanese Breakfast", "Tink", "Megatone", "The Dare", "Horsegiirl", "Hanumanking", "Ivan Cornejo", "Sam Fender", "Yo Gabba Gabba!", "Weezer", "Record Safari", "Keinemusik", "Mau P", "Enhypen", "Shoreline Mafia", "Disco Lines", "Alok", "Salute", "Talón", "Rawayana", "Beth Gibbons", "Darkside", "2hollis", "Viagra Boys", "Glass Beams", "Medium Build", "Elusive", "El Mallila", "VTSS", "Blonde Redhead", "Underscores", "Judeline", "Together Pangaea", "Prison Affair", "Triste Juventud x Tótem"]}, {"name": "Sunday", "artists": ["Post Malone", "Megan Thee Stallion", "Junior H", "Beabadoobee", "Shaboozey", "Jaqck Glam", "Polo & Pan", "Zedd", "Jennie", "Still Woozy", "Keshi", "Meute", "Kraftwerk", "Basement Jaxx", "Rema", "Jessie Murph", "Muni Long", "Fcukers", "Pennywild", "XG", "Ty Dolla $ign", "Chase & Status", "Boris Brejcha", "Sammy Virji", "Ben Böhmer", "Interplanetary Criminal", "Tom Breu", "Amyl and the Sniffers", "Arca", "BigXthaPlug", "Mohamed Ramadan", "Amaarae", "The Beaches", "Hope Tala", "WaveGroove", "Snow Strippers", "Ginger Root", "Circle Jerks", "Soft Play", "Wisp", "Bob Vylan", "Kumo 99", "Sin Rastro"]}], "source": "https://www.thefader.com/2025/04/09/coachella-2025-livestream-performance-schedule", "note": "Built from the weekend 2 schedule; weekend 1 was nearly the same."}]}, {"id": "aftershock", "name": "Aftershock", "aliases": ["sacramento", "rock festival"], "location": "Discovery Park, Sacramento, CA", "editions": [{"year": 2026, "weekends": [{"label": "", "dates": ["Thursday October 1", "Friday October 2", "Saturday October 3", "Sunday October 4"]}], "days": [{"name": "Thursday", "artists": ["My Chemical Romance", "Sublime", "Hot Mulligan", "Mayday Parade", "We The Kings", "Lit", "Free Throw", "The Offspring", "The Used", "New Found Glory", "The Starting Line", "Hawthorne Heights", "L.S. Dunes", "Leap", "The Pretty Reckless", "Nothing More", "Theory Of A Deadman", "Apocalyptica", "Finger Eleven", "Red", "The Violent Hour", "Killswitch Engage", "Sevendust", "Coal Chamber", "The Union Underground", "Ill Niño", "Ünloco", "Brujeria", "Primer 55", "Starset", "From Ashes To New", "Holding Absence", "Caskets", "The Word Alive", "Wind Walkers"]}, {"name": "Friday", "artists": ["Limp Bizkit", "Wu-Tang Clan", "Public Enemy", "Cypress Hill", "Insane Clown Posse", "P.O.D.", "Drowning Pool", "Silly Goose", "$uicideboy$", "Slaughter To Prevail", "Three 6 Mafia", "Kublai Khan TX", "Drain", "Haywire", "Haarper", "Coheed And Cambria", "Underoath", "Alexisonfire", "Senses Fail", "Atreyu", "Finch", "Alesana", "Eyes Set To Kill", "Dethklok", "Chad Gray", "Cradle Of Filth", "Blue Medusa feat. Alissa White-Gluz", "Nekrogoblikon", "Psychostick", "Vianova", "Paleface Swiss", "The Black Dahlia Murder", "Spite", "Bodysnatcher", "Peelingflesh", "Rivers Of Nihil"]}, {"name": "Saturday", "artists": ["Pierce The Veil", "BABYMETAL", "Sleeping With Sirens", "Chiodos", "Set It Off", "Blessthefall", "ivri", "Fear, and Loathing in Las Vegas", "A Day To Remember", "The Story So Far", "Wage War", "The Wonder Years", "The Devil Wears Prada", "Escape The Fate", "Austin Carlile", "Black Label Society", "Down", "Corrosion Of Conformity", "Kylesa", "Melvins", "Pentagram", "Doobie", "Circa Survive", "La Dispute", "Thursday", "Saosin", "Armor For Sleep", "Horse The Band", "Emery", "The Fall Of Troy", "The Ghost Inside", "Counterparts", "After The Burial", "The Acacia Strain", "Stick To Your Guns", "Gideon"]}, {"name": "Sunday", "artists": ["TOOL", "Danny Elfman", "AFI", "Zakk Sabbath", "Buckethead", "Helmet", "CKY", "Queens of the Stone Age", "Stone Temple Pilots", "Highly Suspect", "Wolfmother", "Filter", "Oleander", "Toadies", "Body Count", "Suicidal Tendencies", "Cavalera", "Soulfly", "Municipal Waste", "Cro-Mags", "Codefendants", "Dance Gavin Dance", "The Home Team", "From First To Last", "Hail The Sun", "I See Stars", "Drop Dead, Gorgeous", "Emarosa", "I Set My Friends On Fire", "Sleep Theory", "President", "Jutes", "Holywatr", "The Pretty Wild", "Cenobia"]}], "source": "https://www.gratefulweb.com/?p=676447"}, {"year": 2025, "weekends": [{"label": "", "dates": ["Thursday October 2", "Friday October 3", "Saturday October 4", "Sunday October 5"]}], "days": [{"name": "Thursday", "artists": ["Blink-182", "All Time Low", "Taking Back Sunday", "Alkaline Trio", "State Champs", "Hoobastank", "The Ataris", "Good Charlotte", "The All American Rejects", "Hollywood Undead", "Mom Jeans.", "Bowling for Soup", "Red Jumpsuit Apparatus", "Hot Milk", "Acid Bath", "Power Trip", "Carcass", "High on Fire", "Cattle Decapitation", "Nails", "Snot", "Dry Kill Logic", "Hatebreed", "A Tribute to S.O.D.", "All Shall Perish", "Speed", "Spite", "Thrown", "Left to Suffer"]}, {"name": "Friday", "artists": ["Deftones", "Turnstile", "Knocked Loose", "The Dillinger Escape Plan", "Basement", "Failure", "Glare", "Quannic", "A Perfect Circle", "Lamb of God", "Bruce Dickinson", "Kerry King", "Fear Factory", "Lacuna Coil", "Winds of Plague", "Dream Theater", "Testament", "Exodus", "Alestorm", "Yngwie Malmsteen", "Death Angel", "Gloryhammer", "Forbidden", "Chiodos", "Of Mice & Men", "Get Scared", "Northlane", "Landmvrks", "Violent Vira", "Thornhill"]}, {"name": "Saturday", "artists": ["Korn", "Gojira", "Chevelle", "Slaughter to Prevail", "Bilmuri", "Saliva", "Nonpoint", "Return to Dust", "Bad Omens", "Three Days Grace", "Trivium", "Dayseeker", "Kittie", "Memphis May Fire", "Scary Kids Scaring Kids", "Powerwolf", "DragonForce", "August Burns Red", "Imminence", "Dying Fetus", "Demon Hunter", "Seven Hours After Violet", "Born of Osiris", "Sunami", "Trash Talk", "Scowl", "Dying Wish", "Xibalba", "Snuffed on Sight", "Spy"]}, {"name": "Sunday", "artists": ["Bring Me the Horizon", "Marilyn Manson", "Motionless in White", "Black Veil Brides", "Story of the Year", "The Plot in You", "Sleep Theory", "Rob Zombie", "Mudvayne", "In This Moment", "Machine Head", "Static-X", "Spineshank", "Dope", "Flyleaf Featuring Lacey Sturm", "Pop Evil", "Hinder", "Crossfade", "Sick Puppies", "Rev Theory", "12 Stones", "Five Headed Cobra", "Cavalera Chaos AD", "GWAR", "DevilDriver", "Chimaira", "3 Inches of Blood", "Six Feet Under", "Prong"]}], "source": "https://loudwire.com/aftershock-festival-2025-lineup/"}]}, {"id": "lolla", "name": "Lollapalooza", "aliases": ["lolla", "chicago", "grant park"], "location": "Grant Park, Chicago, IL", "editions": [{"year": 2025, "weekends": [{"label": "", "dates": ["Thursday July 31", "Friday August 1", "Saturday August 2", "Sunday August 3"]}], "days": [{"name": "Thursday", "artists": ["Tyler, The Creator", "Luke Combs", "Gracie Abrams", "Dom Dolla", "Cage The Elephant", "Sierra Ferrell", "Role Model", "Mau P", "Royel Otis", "Barry Can't Swim", "Magdalena Bay", "2hollis", "Cloonee", "Alex Warren", "Overmono", "Xdinary Heroes", "The Blessed Madonna", "Half-Alive", "Mark Ambor", "Fcukers", "Matt Champion", "Glass Beams", "Prospa", "Julie Durand", "Bernarr", "Azzecca", "Ratboys", "Nourished By Time", "Sunami", "Black Party", "The Droptines", "Silly Goose", "The Symposium", "Torren Foot b2b Airwolf Paradise", "Jade LeMac", "DJ Heather", "Yana", "Xaviersobased", "Colby Acuff", "Bo Staloch", "Alexsucks", "Chicago Made", "Girl Tones"]}, {"name": "Friday", "artists": ["Olivia Rodrigo", "Korn", "Djo", "Bleachers", "Wallows", "T-Pain", "Knock2", "Foster The People", "Bladee", "Flipturn", "Isoxo", "Tape B", "Amaarae", "The Dare", "Gigi Perez", "Ravyn Lenae", "Wyatt Flores", "BUNT.", "Ocean Alley", "Del Water Gap", "Otoboke Beaver", "Kenny Mason", "Murda Beatz", "Orla Gartland", "Hey, Nothing", "Alleycvt", "Isabel LaRosa", "Jane Remover", "Alemeda", "Zinadelphia", "Tanner Adell", "Dogpark", "Old Mervs", "Jesse Detor", "Viperactive", "Mary Droppinz", "Hex Cougar", "Carol Ades", "Caroline Kingsbury", "Star Bandz", "Midnight Generation", "Cassandra Coleman", "Winyah"]}, {"name": "Saturday", "artists": ["RÜFÜS DU SOL", "TWICE", "Doechii", "Clairo", "Young Miko", "MK.gee", "Two Friends", "Marina", "Chase & Status", "Levity", "JPEGMAFIA", "Fujii Kaze", "Dr. Fresch", "Bilmuri", "Damiano David", "Orion Sun", "OLE 60", "Bossman Dlow", "Max Mcnown", "Flux Pavilion", "Montell Fish", "Wasia Project", "Layz", "Ca7riel & Paco Amoroso", "Salute", "Charlotte Lawrence", "Kickflip", "Naomi Scott", "Sam Austins", "Chicago Youth Symphony Orchestra", "Newdad", "BoA", "Dua Saleh", "Daniel Allan", "Winnetka Bowling League", "Junior Varsity", "Carter Vail", "Rachel Grae", "People R Ugly", "Landon Conrath", "Jev", "Tessla", "Eddie and the Getaway", "Zoe Ko", "Chance the Rapper"]}, {"name": "Sunday", "artists": ["Sabrina Carpenter", "A$AP Rocky", "Martin Garrix", "The Marías", "Dominic Fike", "Still Woozy", "Finneas", "Remi Wolf", "Latin Mafia", "Gryffin", "Sammy Virji", "Isaiah Rashad", "Mariah The Scientist", "Wave to Earth", "Marlon Hoffstadt", "Artemas", "Joey Valence & Brae", "Katseye", "Maribou State", "La Femme", "Wild Rivers", "Rebecca Black", "Wunderhorse", "Laila!", "Boynextdoor", "Flowerovlove", "Willow", "Avalon Vincent", "Lima Joe P", "Nimino", "Jigitz", "The Criticals", "Landon Barker", "Blk Odyssey", "Benches", "Lekan", "Sofia Camara", "Aliyah's Interlude", "Graham Barham", "Kaicrewsade", "Raecola"]}], "source": "https://fox32chicago.com/news/lolla-day-lineup-2025"}]}, {"id": "edc", "name": "Electric Daisy Carnival (EDC Las Vegas)", "aliases": ["edc", "edc vegas", "insomniac", "las vegas"], "location": "Las Vegas Motor Speedway, Las Vegas, NV", "editions": [{"year": 2025, "partial": true, "weekends": [{"label": "", "dates": ["May 16–18"]}], "days": [{"name": "Featured acts (full lineup has 250+ artists)", "artists": ["Martin Garrix", "Tiësto", "Fisher", "Dom Dolla", "Kaskade", "DJ Snake", "Armin van Buuren", "Sara Landry", "SLANDER", "Mochakk", "Illenium", "RL Grime", "Tape B", "Gesaffelstein", "Alison Wonderland B2B Kaskade", "Rezz", "Excision", "Crankdat B2B Tape B", "Svdden Death", "Sullivan King", "Basswell", "Shlømo", "Sub Zero Project", "Showtek", "Disco Dom", "Hugel & Friends", "Walker & Royce", "Vini Vici", "Maddix B2B Ben Nicky", "PRYDA", "The Martinez Brothers B2B Loco Dice", "I Hate Models B2B Nico Moreno", "Skream B2B Partiboi69", "Prospa B2B Josh Baker"]}], "source": "https://edmnomad.com/?p=15736", "note": "Featured acts only. The daily split wasn't published in the sources I found."}]}, {"id": "tomorrowland", "name": "Tomorrowland", "aliases": ["tomorrowland belgium", "boom"], "location": "Boom, Belgium", "editions": [{"year": 2025, "partial": true, "weekends": [{"label": "Weekend 1", "dates": ["July 18–20"]}, {"label": "Weekend 2", "dates": ["July 25–27"]}], "days": [{"name": "Highlights (full lineup has 600+ artists)", "artists": ["Swedish House Mafia", "David Guetta", "Martin Garrix", "Anyma", "Armin van Buuren", "Charlotte De Witte", "Amelie Lens", "Alok", "Fisher", "ANNA", "Job Jobse", "Amber Broos", "Anyma b2b Solomun", "Dimitri Vegas b2b Fantasm", "DJ BORING b2b HAAi", "Timmy Trumpet b2b Dimitri Vegas", "VTSS b2b SPFDJ", "Sam Divine b2b Arielle Free"]}], "source": "https://djmag.com/news/tomorrowland-2025-full-line-announced", "note": "Highlights only."}]}];
+var FESTS=[
+ {name:"Coachella",location:"Indio, CA",aliases:["coachella valley","indio"]},
+ {name:"Stagecoach",location:"Indio, CA",aliases:["country"]},
+ {name:"Lollapalooza",location:"Chicago, IL",aliases:["lolla","grant park"]},
+ {name:"Electric Daisy Carnival (EDC Las Vegas)",location:"Las Vegas, NV",aliases:["edc","insomniac","vegas"]},
+ {name:"Tomorrowland",location:"Boom, Belgium",aliases:["boom","belgium"]},
+ {name:"Ultra Music Festival",location:"Miami, FL",aliases:["ultra","miami"]},
+ {name:"Aftershock",location:"Sacramento, CA",aliases:["rock","sacramento"]},
+ {name:"Bonnaroo",location:"Manchester, TN",aliases:["roo"]},
+ {name:"Governors Ball",location:"New York, NY",aliases:["gov ball","nyc"]},
+ {name:"Outside Lands",location:"San Francisco, CA",aliases:["sf","golden gate"]},
+ {name:"Austin City Limits",location:"Austin, TX",aliases:["acl"]},
+ {name:"Electric Forest",location:"Rothbury, MI",aliases:["ef"]},
+ {name:"BottleRock Napa Valley",location:"Napa, CA",aliases:["bottlerock","napa"]},
+ {name:"Boston Calling",location:"Boston, MA",aliases:[]},
+ {name:"Newport Folk Festival",location:"Newport, RI",aliases:["newport"]},
+ {name:"Rolling Loud",location:"",aliases:["hip hop","rap"]},
+ {name:"Glastonbury",location:"Pilton, UK",aliases:["glasto"]},
+ {name:"Reading & Leeds",location:"UK",aliases:["reading","leeds"]},
+ {name:"Download Festival",location:"Donington Park, UK",aliases:["download","metal"]},
+ {name:"Primavera Sound",location:"Barcelona, Spain",aliases:["primavera"]},
+ {name:"Wacken Open Air",location:"Wacken, Germany",aliases:["wacken","metal"]},
+ {name:"Hellfest",location:"Clisson, France",aliases:["metal"]},
+ {name:"Sziget",location:"Budapest, Hungary",aliases:[]},
+ {name:"Roskilde Festival",location:"Roskilde, Denmark",aliases:["roskilde"]}
+];
 function toast(msg){var t=$("toast");t.textContent=msg;t.classList.add("on");clearTimeout(toast._t);toast._t=setTimeout(function(){t.classList.remove("on");},3200);}
 function backBtn(fn){var b=el("button","btn","Back");b.onclick=fn;return b;}
 
@@ -639,51 +664,27 @@ function wizPick(q){
   q=q||"";
   var box=el("div");
   box.appendChild(el("h2",null,"Add a show"));
-  box.appendChild(el("p","sub","Find the festival, pick the year, tick who you saw."));
+  box.appendChild(el("p","sub","Pick the festival. Your AI fetches the lineup, then you tick who you saw."));
   var inp=el("input");inp.type="search";inp.placeholder="Search festivals (Coachella, EDC, Lolla...)";inp.value=q;inp.autocomplete="off";inp.autocapitalize="off";box.appendChild(inp);
   var list=el("div");list.style.marginTop="12px";box.appendChild(list);
   function draw(){
     list.textContent="";var s=norm(inp.value);
-    var hits=CATALOG.filter(function(f){return !s||norm(f.name).indexOf(s)>-1||f.aliases.some(function(a){return a.indexOf(s)>-1;});});
+    var hits=FESTS.filter(function(f){return !s||norm(f.name).indexOf(s)>-1||f.aliases.some(function(a){return a.indexOf(s)>-1;});});
     hits.forEach(function(f){
       var b=el("button","wizcard");b.appendChild(el("b",null,f.name));
-      b.appendChild(el("small",null,f.location+"  ·  "+f.editions.map(function(e){return e.year;}).join(", ")));
-      b.onclick=function(){wizYear(f);};list.appendChild(b);
+      if(f.location)b.appendChild(el("small",null,f.location));
+      b.onclick=function(){wizCustom(f.name,f.location);};list.appendChild(b);
     });
     var other=el("button","wizcard dashed");
-    other.appendChild(el("b",null,s&&!hits.length?"Add “"+inp.value.trim()+"” yourself":"Not listed? Add it yourself"));
-    other.appendChild(el("small",null,"Paste the lineup, then tick who you saw."));
-    other.onclick=function(){wizCustom(inp.value.trim());};list.appendChild(other);
+    var typed=inp.value.trim();
+    other.appendChild(el("b",null,typed&&!hits.length?"Add “"+typed+"”":"Not listed? Add any show"));
+    other.appendChild(el("small",null,"Any festival, concert or tour."));
+    other.onclick=function(){wizCustom(typed);};list.appendChild(other);
   }
   inp.oninput=draw;draw();
   var a=el("div","actions");var m=el("button","btn","Use the manual form");m.onclick=function(){openEdit(null);};
   var c=el("button","btn","Close");c.onclick=closeSheet;a.appendChild(m);a.appendChild(c);box.appendChild(a);
   openSheet(box);
-}
-
-function wizYear(f){
-  var box=el("div");box.appendChild(el("h2",null,f.name));box.appendChild(el("p","sub","Which year?"));
-  f.editions.forEach(function(e){
-    var b=el("button","wizcard");
-    b.appendChild(el("b",null,String(e.year)+(e.partial?"  ·  highlights only":"")));
-    var d0=e.weekends[0].dates;
-    b.appendChild(el("small",null,e.weekends.length>1?e.weekends.length+" weekends":d0.length>1?d0[0]+" to "+d0[d0.length-1]:d0[0]));
-    b.onclick=function(){if(e.weekends.length>1)wizWeekend(f,e);else wizCheck(f,e,0);};box.appendChild(b);
-  });
-  var o=el("button","wizcard dashed");o.appendChild(el("b",null,"A different year"));o.appendChild(el("small",null,"Add it yourself with a pasted lineup."));
-  o.onclick=function(){wizCustom(f.name,f.location);};box.appendChild(o);
-  var a=el("div","actions");a.appendChild(backBtn(function(){wizPick();}));box.appendChild(a);openSheet(box);
-}
-
-function wizWeekend(f,e){
-  var box=el("div");box.appendChild(el("h2",null,f.name+" "+e.year));box.appendChild(el("p","sub","Which weekend did you go?"));
-  e.weekends.forEach(function(w,i){
-    var b=el("button","wizcard");b.appendChild(el("b",null,w.label));b.appendChild(el("small",null,w.dates[0]+(w.dates.length>1?" to "+w.dates[w.dates.length-1]:"")));
-    b.onclick=function(){wizCheck(f,e,i);};box.appendChild(b);
-  });
-  var bothCard=el("button","wizcard dashed");bothCard.appendChild(el("b",null,"Both weekends"));bothCard.appendChild(el("small",null,"Tick once. It saves to each weekend with its own dates."));
-  bothCard.onclick=function(){wizCheck(f,e,-1);};box.appendChild(bothCard);
-  var a=el("div","actions");a.appendChild(backBtn(function(){wizYear(f);}));box.appendChild(a);openSheet(box);
 }
 
 function cleanName(x){return String(x||"").replace(/[*_`#>]+/g,"").replace(/^["'“”]+|["'“”]+$/g,"").replace(/\s+/g," ").trim();}
@@ -695,12 +696,19 @@ function parseAIAnswer(txt){
   if(!j){var a2=t.indexOf("["),b2=t.lastIndexOf("]");if(a2>-1&&b2>a2){try{j=JSON.parse(t.slice(a2,b2+1));}catch(e){j=null;}}}
   if(j){
     var arr=Array.isArray(j)?j:(j.days||[]);
+    var multiLabels=(!Array.isArray(j)&&Array.isArray(j.weekends)&&j.weekends.length>1)?j.weekends.map(function(w){return cleanName(w);}):null;
     var out=arr.map(function(d,i){
       var list=(d&&(d.artists||d.lineup))||[];
-      list=list.map(function(x){return cleanName(typeof x==="string"?x:(x&&x.name));}).filter(Boolean);
-      return {name:cleanName(d&&(d.label||d.day||d.name))||"Day "+(i+1),artists:dedupeNames(list)};
+      var names=[];
+      list.forEach(function(x){
+        var n=cleanName(typeof x==="string"?x:(x&&x.name));if(!n)return;
+        var w=(x&&typeof x==="object"&&x.weekend!=null)?parseInt(x.weekend,10):null;
+        names.push(multiLabels&&w>0?[n,w]:n);
+      });
+      var seen={},uniq=[];names.forEach(function(x){var k=norm(typeof x==="string"?x:x[0]);if(k&&!seen[k]){seen[k]=1;uniq.push(x);}});
+      return {name:cleanName(d&&(d.label||d.day||d.name))||"Day "+(i+1),artists:uniq,dates:(d&&Array.isArray(d.dates))?d.dates.map(cleanName):null};
     }).filter(function(d){return d.artists.length;});
-    if(out.length)return {days:out,meta:Array.isArray(j)?{}:j};
+    if(out.length)return {days:out,meta:Array.isArray(j)?{}:j,multi:(multiLabels&&out.some(function(d){return d.dates;}))?multiLabels:null};
   }
   var dayRe=/^((mon|tue|tues|wed|thu|thur|thurs|fri|sat|sun)[a-z]*\b.*|day\s*\d+.*|weekend\s*\d+.*)$/i;
   var days=[],cur=null;
@@ -716,15 +724,20 @@ function parseAIAnswer(txt){
     parts.forEach(function(p){var n=cleanName(p);if(n)cur.artists.push(n);});
   });
   days=days.map(function(d){d.artists=dedupeNames(d.artists);return d;}).filter(function(d){return d.artists.length;});
-  return days.length?{days:days,meta:{}}:null;
+  return days.length?{days:days,meta:{},multi:null}:null;
 }
 function aiPrompt(name,year,loc,wk,when){
-  var who=name+" "+year+(wk?" ("+wk+")":"")+(loc?", "+loc:"");
-  var went=(wk||when)?"\n\nI went to "+(wk||"this edition")+(when?" ("+when+")":"")+", so use that weekend's real calendar dates in the day labels"+(wk?" and mark any acts that only played "+wk:"")+".":"";
+  var both=wk==="both";
+  var who=name+" "+year+(wk&&!both?" ("+wk+")":"")+(loc?", "+loc:"");
+  var went="";
+  if(both)went="\n\nThis festival ran more than one weekend and I went to ALL of them. Give each weekend's real calendar dates"+(when?" (I went "+when+")":"")+". If an act played only one weekend, mark it with that weekend's number.";
+  else if(wk||when)went="\n\nI went to "+(wk||"this edition")+(when?" ("+when+")":"")+", so use that weekend's real calendar dates in the day labels"+(wk?" and leave out acts that only played the other weekend":"")+".";
+  var fmt=both
+    ?"{\"festival\":\""+name+"\",\"year\":"+year+",\"location\":\"City, State/Country\",\"weekends\":[\"Weekend 1\",\"Weekend 2\"],\"days\":[{\"label\":\"Friday\",\"dates\":[\"Friday April 11\",\"Friday April 18\"],\"artists\":[\"Artist One\",{\"name\":\"Artist Two\",\"weekend\":1}]}]}"
+    :"{\"festival\":\""+name+"\",\"year\":"+year+",\"weekend\":\""+(wk||"")+"\",\"location\":\"City, State/Country\",\"days\":[{\"label\":\"Friday April 11\",\"artists\":[\"Artist One\",\"Artist Two\"]}]}";
   return "I'm logging festivals I've been to. Please search the web and give me the lineup for "+who+", grouped by day."+went+"\n\n"+
-  "Reply with ONLY one JSON code block in exactly this format:\n"+
-  "{\"festival\":\""+name+"\",\"year\":"+year+",\"weekend\":\""+(wk||"")+"\",\"location\":\"City, State/Country\",\"days\":[{\"label\":\"Friday April 11\",\"artists\":[\"Artist One\",\"Artist Two\"]}]}\n\n"+
-  "Rules: use each performer's name exactly as printed, one entry per act, include every stage. Label each day with the weekday and date. If the daily split wasn't published, use one day labeled with the date range. If you're unsure about a name, leave it out and tell me after the JSON.";
+  "Reply with ONLY one JSON code block in exactly this format:\n"+fmt+"\n\n"+
+  "Rules: use each performer's name exactly as printed, one entry per act, include every stage. Label each day with the weekday"+(both?"":" and date")+". If the daily split wasn't published, use one day labeled with the date range. If you're unsure about a name, leave it out and tell me after the JSON.";
 }
 function copyText(txt,done){
   function fb(){var ta=document.createElement("textarea");ta.value=txt;ta.style.cssText="position:fixed;opacity:0";document.body.appendChild(ta);ta.select();try{document.execCommand("copy");done(true);}catch(e){done(false);}ta.remove();}
@@ -733,19 +746,19 @@ function copyText(txt,done){
 }
 
 function wizCustom(name,loc){
-  var box=el("div");box.appendChild(el("h2",null,"Add it yourself"));
-  box.appendChild(el("p","sub","Not in the list? Let your AI fetch the lineup, or paste one in."));
+  var box=el("div");box.appendChild(el("h2",null,name?name:"Add a show"));
+  box.appendChild(el("p","sub","Your AI fetches the current lineup. Then you tick who you saw."));
   var fest=el("input");fest.value=name||"";fest.placeholder="Festival or show name";
   var year=el("input");year.type="number";year.inputMode="numeric";year.value=new Date().getFullYear();var yearTouched=false;year.oninput=function(){yearTouched=true;};
   var row=el("div","row");var l=el("div");l.appendChild(el("label",null,"Name"));l.appendChild(fest);var r=el("div");r.appendChild(el("label",null,"Year"));r.appendChild(year);row.appendChild(l);row.appendChild(r);box.appendChild(row);
   box.appendChild(el("label",null,"Location (optional)"));var loc_=el("input");loc_.value=loc||"";box.appendChild(loc_);
   box.appendChild(el("label",null,"Weekend (only if the festival runs more than one)"));
-  var wkSel=el("select");["","Weekend 1","Weekend 2","Weekend 3"].forEach(function(w){var o=el("option",null,w||"Not applicable");o.value=w;wkSel.appendChild(o);});box.appendChild(wkSel);
+  var wkSel=el("select");[["","Not applicable"],["Weekend 1","Weekend 1"],["Weekend 2","Weekend 2"],["Weekend 3","Weekend 3"],["both","Both weekends (saves to each)"]].forEach(function(w){var o=el("option",null,w[1]);o.value=w[0];wkSel.appendChild(o);});box.appendChild(wkSel);
   box.appendChild(el("label",null,"Dates you went (optional)"));
   var when=el("input");when.placeholder="e.g. April 18–20";box.appendChild(when);
 
   var ai=el("div","aibox");
-  ai.appendChild(el("b",null,"Fastest: ask your AI"));
+  ai.appendChild(el("b",null,"Ask your AI for the lineup"));
   ai.appendChild(el("p","hint","1. Copy the prompt and send it to Claude, ChatGPT or Gemini.  2. Paste its answer below."));
   var btns=el("div","aibtns");
   var promptBox=el("textarea");promptBox.rows=6;promptBox.readOnly=true;promptBox.style.display="none";promptBox.style.marginTop="10px";
@@ -762,10 +775,12 @@ function wizCustom(name,loc){
   var ans=el("textarea");ans.rows=5;ans.placeholder="Paste the JSON (or a plain list with day headings) here";ai.appendChild(ans);
   box.appendChild(ai);
 
-  box.appendChild(el("p","hint","Or type it yourself"));
-  box.appendChild(el("label",null,"Day"));var dl=el("input");dl.placeholder="e.g. Friday June 20";box.appendChild(dl);
-  box.appendChild(el("label",null,"Lineup (one per line, or separated by commas)"));
-  var ta=el("textarea");ta.rows=6;ta.placeholder="Artist one\nArtist two\nArtist three";box.appendChild(ta);
+  var more=el("details");more.style.marginTop="10px";
+  more.appendChild(el("summary","hint","Or type a lineup yourself"));
+  more.appendChild(el("label",null,"Day"));var dl=el("input");dl.placeholder="e.g. Friday June 20";more.appendChild(dl);
+  more.appendChild(el("label",null,"Lineup (one per line, or separated by commas)"));
+  var ta=el("textarea");ta.rows=6;ta.placeholder="Artist one\nArtist two\nArtist three";more.appendChild(ta);
+  box.appendChild(more);
   var err=el("p","hint","");err.style.color="var(--danger)";box.appendChild(err);
   var a=el("div","actions");a.appendChild(backBtn(function(){wizPick(name);}));
   var go=el("button","btn primary","Next: tick who you saw");
@@ -773,24 +788,36 @@ function wizCustom(name,loc){
     err.textContent="";
     var n=fest.value.trim(),y=parseInt(year.value,10);
     if(!n||!y){fest.style.borderColor="#ff5a7a";return;}
-    var days=null,locOut=loc_.value.trim(),wkOut=wkSel.value;
+    var days=null,locOut=loc_.value.trim(),wkOut=wkSel.value,multi=null;
     if(ans.value.trim()){
       var parsed=parseAIAnswer(ans.value);
-      if(!parsed){err.textContent="I couldn't find any artists in that answer. Try asking the AI for the JSON format again, or type the lineup below.";return;}
-      days=parsed.days;if(!yearTouched&&parsed.meta&&parseInt(parsed.meta.year,10)>1950&&parseInt(parsed.meta.year,10)<2100)y=parseInt(parsed.meta.year,10);if(!wkOut&&parsed.meta&&/^weekend\s*\d/i.test(String(parsed.meta.weekend||"")))wkOut="Weekend "+String(parsed.meta.weekend).match(/\d+/)[0];if(!locOut&&parsed.meta&&parsed.meta.location)locOut=String(parsed.meta.location).slice(0,80);
+      if(!parsed){err.textContent="I couldn't find any artists in that answer. Ask the AI for the JSON format again, or type the lineup under “Or type a lineup yourself.”";return;}
+      days=parsed.days;multi=parsed.multi;
+      if(!yearTouched&&parsed.meta&&parseInt(parsed.meta.year,10)>1950&&parseInt(parsed.meta.year,10)<2100)y=parseInt(parsed.meta.year,10);
+      if(!locOut&&parsed.meta&&parsed.meta.location)locOut=String(parsed.meta.location).slice(0,80);
+      if(!multi&&!wkOut&&parsed.meta&&/^weekend\s*\d/i.test(String(parsed.meta.weekend||"")))wkOut="Weekend "+String(parsed.meta.weekend).match(/\d+/)[0];
     }else{
       var list=ta.value.split(/[\n,]+/).map(function(x){return x.trim();}).filter(Boolean);
-      if(!list.length){err.textContent="Paste your AI's answer above, or type a lineup.";ta.style.borderColor="#ff5a7a";return;}
+      if(!list.length){err.textContent="Paste your AI's answer above, or type a lineup.";more.open=true;ta.style.borderColor="#ff5a7a";return;}
+      if(wkOut==="both"){err.textContent="For both weekends, use the AI prompt above. For a typed lineup, pick one weekend.";return;}
       days=[{name:dl.value.trim()||"Day 1",artists:list}];
     }
-    wizCheck({name:n,location:locOut},{year:y,custom:true,weekend:wkOut,weekends:[{label:"",dates:days.map(function(d){return d.name;})}],days:days},0);
+    var F={name:n,location:locOut};
+    if(multi){
+      var ws=multi.map(function(lab,i){return {label:lab,dates:days.map(function(d){return (d.dates&&d.dates[i])||d.name;})};});
+      var pickIdx=-1,m=/^Weekend (\d)$/.exec(wkOut);if(m&&+m[1]<=ws.length)pickIdx=+m[1]-1;
+      wizCheck(F,{year:y,custom:true,weekends:ws,days:days.map(function(d){return {name:d.name,artists:d.artists};})},pickIdx);
+      return;
+    }
+    if(wkOut==="both"){err.textContent="Your AI answered for a single weekend. Ask again with the prompt above, or pick one weekend.";return;}
+    wizCheck(F,{year:y,custom:true,weekend:wkOut,weekends:[{label:"",dates:days.map(function(d){return d.name;})}],days:days},0);
   };
   a.appendChild(go);box.appendChild(a);openSheet(box);
 }
 
 function wizCheck(f,e,wk){
   var both=wk<0,weekendNo=wk+1;
-  var wkLabel=both?"Both weekends":(e.custom?(e.weekend||""):(e.weekends.length>1?e.weekends[wk].label:""));
+  var wkLabel=both?"Both weekends":(e.weekends.length>1?e.weekends[wk].label:(e.weekend||""));
   var tags=[];
   var days=e.days.map(function(d){
     var tg={},names=[];
@@ -844,7 +871,7 @@ function wizCheck(f,e,wk){
   find.oninput=function(){var s=norm(find.value);
     sections.forEach(function(x){var any=false;Array.prototype.forEach.call(x.grid.children,function(b){var m=!s||b.getAttribute("data-n").indexOf(s)>-1;b.style.display=m?"":"none";if(m)any=true;});x.sec.style.display=(!s||any)?"":"none";});};
 
-  if(e.custom){
+  if(e.custom&&!both&&e.weekends.length===1){
     var more=el("button","wizcard dashed");more.appendChild(el("b",null,"+ Add another day"));more.style.marginTop="12px";
     more.onclick=function(){
       var m=el("div","wizday");m.appendChild(el("label",null,"Day"));var di_=el("input");di_.placeholder="e.g. Saturday June 21";m.appendChild(di_);
@@ -859,10 +886,10 @@ function wizCheck(f,e,wk){
   }
 
   var foot=el("div","wizfoot");
-  foot.appendChild(backBtn(function(){if(e.custom)wizCustom(f.name,f.location);else if(e.weekends.length>1)wizWeekend(f,e);else wizYear(f);}));
+  foot.appendChild(backBtn(function(){wizCustom(f.name,f.location);}));
   var save_=el("button","btn primary");save_.appendChild(document.createTextNode("Save "));save_.appendChild(count);save_.appendChild(document.createTextNode(" artists"));
   function saveWeekend(w){
-    var wl=e.custom?(e.weekend||""):(e.weekends.length>1?e.weekends[w].label:"");
+    var wl=e.weekends.length>1?e.weekends[w].label:(e.weekend||"");
     var dts=e.weekends[w].dates;
     var target=state.shows.filter(function(s){return s.year===e.year&&norm(s.festival)===norm(f.name)&&norm(s.weekend||"")===norm(wl);})[0];
     if(!target){target={id:uid(),year:e.year,festival:f.name,location:f.location||"",days:[]};if(wl)target.weekend=wl;state.shows.push(target);}
