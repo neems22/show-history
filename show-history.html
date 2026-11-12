@@ -1,0 +1,962 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>Show History</title>
+<style>
+:root,[data-theme="neon"]{
+  --bg:#07070d; --panel:#12121c; --panel2:#1a1a28; --line:#262638; --text:#f2f2f8; --muted:#8c8ca6;
+  --accent:#b46bff; --on-accent:#14041f; --radius:16px; --pill:999px;
+  --title-grad:linear-gradient(90deg,#fff,#b46bff 55%,#4fd1ff);
+  --primary-grad:linear-gradient(90deg,#b46bff,#4fd1ff); --on-primary:#0a0614; --primary-shadow:0 8px 30px rgba(120,100,255,.35);
+  --chip-on-bg:#fff; --chip-on-text:#000; --hit-bg:rgba(255,255,255,.12); --hit-line:rgba(255,255,255,.5);
+  --note-bg:#2a1f12; --note-border:#5a4020; --note-text:#ffcf8a; --note-btn:#ffcf8a; --note-btn-text:#2a1f12;
+  --danger:#ff7a8a; --head-font:inherit; --head-case:none; --head-track:-.03em; --head-weight:800;
+}
+[data-theme="metal"]{
+  --bg:#080808; --panel:#131313; --panel2:#1c1c1c; --line:#2f2f2f; --text:#ebe6de; --muted:#8d887e;
+  --accent:#d11a1a; --on-accent:#fff; --radius:3px; --pill:3px;
+  --title-grad:linear-gradient(180deg,#f4efe6 20%,#a31212 95%);
+  --primary-grad:linear-gradient(180deg,#c01818,#6e0a0a); --on-primary:#fff; --primary-shadow:0 6px 24px rgba(190,20,20,.35);
+  --chip-on-bg:#c01818; --chip-on-text:#fff; --hit-bg:rgba(209,26,26,.25); --hit-line:#d11a1a;
+  --note-bg:#1d1010; --note-border:#5a1b1b; --note-text:#e9b0a8; --note-btn:#c01818; --note-btn-text:#fff;
+  --danger:#ff5a5a; --head-font:Impact,Haettenschweiler,"Arial Narrow Bold","Arial Black",sans-serif; --head-case:uppercase; --head-track:.02em; --head-weight:400;
+}
+[data-theme="groovy"]{
+  --bg:#fff3fb; --panel:#ffffff; --panel2:#ffe3f4; --line:#ffbfe3; --text:#3a0f33; --muted:#9a5b8a;
+  --accent:#ff2e93; --on-accent:#fff; --radius:26px; --pill:999px;
+  --title-grad:linear-gradient(90deg,#ff2e93,#8a2be2 55%,#12b76a);
+  --primary-grad:linear-gradient(90deg,#ff2e93,#8a2be2); --on-primary:#fff; --primary-shadow:0 8px 24px rgba(255,46,147,.35);
+  --chip-on-bg:#ff2e93; --chip-on-text:#fff; --hit-bg:rgba(18,183,106,.28); --hit-line:#12b76a;
+  --note-bg:#e3ffe9; --note-border:#8fe0ae; --note-text:#0b5a33; --note-btn:#12b76a; --note-btn-text:#fff;
+  --danger:#d1004f; --head-font:"Avenir Next Rounded","Trebuchet MS","Segoe UI",sans-serif; --head-case:none; --head-track:-.02em; --head-weight:900;
+}
+[data-theme="plain"]{
+  --bg:#ffffff; --panel:#f5f5f7; --panel2:#ebebef; --line:#dcdce2; --text:#111114; --muted:#6b6b76;
+  --accent:#111114; --on-accent:#fff; --radius:12px; --pill:10px;
+  --title-grad:linear-gradient(#111114,#111114);
+  --primary-grad:linear-gradient(#111114,#111114); --on-primary:#fff; --primary-shadow:0 4px 14px rgba(0,0,0,.18);
+  --chip-on-bg:#111114; --chip-on-text:#fff; --hit-bg:rgba(255,214,0,.45); --hit-line:#111114;
+  --note-bg:#f1f1f4; --note-border:#dcdce2; --note-text:#444; --note-btn:#111114; --note-btn-text:#fff;
+  --danger:#c62828; --head-font:inherit; --head-case:none; --head-track:-.02em; --head-weight:800;
+}
+[data-theme="groovy"] header::after{content:"";display:block;height:40px;margin-top:12px;background:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='40' viewBox='0 0 120 40'><g transform='translate(20,20)'><g fill='%23ff2e93'><ellipse cx='0' cy='-9' rx='4' ry='8' transform='rotate(0)'/><ellipse cx='0' cy='-9' rx='4' ry='8' transform='rotate(45)'/><ellipse cx='0' cy='-9' rx='4' ry='8' transform='rotate(90)'/><ellipse cx='0' cy='-9' rx='4' ry='8' transform='rotate(135)'/><ellipse cx='0' cy='-9' rx='4' ry='8' transform='rotate(180)'/><ellipse cx='0' cy='-9' rx='4' ry='8' transform='rotate(225)'/><ellipse cx='0' cy='-9' rx='4' ry='8' transform='rotate(270)'/><ellipse cx='0' cy='-9' rx='4' ry='8' transform='rotate(315)'/></g><circle r='4.5' fill='%23ffe600'/></g><g transform='translate(60,20)'><g fill='%2312b76a'><ellipse cx='0' cy='-9' rx='4' ry='8' transform='rotate(22)'/><ellipse cx='0' cy='-9' rx='4' ry='8' transform='rotate(67)'/><ellipse cx='0' cy='-9' rx='4' ry='8' transform='rotate(112)'/><ellipse cx='0' cy='-9' rx='4' ry='8' transform='rotate(157)'/><ellipse cx='0' cy='-9' rx='4' ry='8' transform='rotate(202)'/><ellipse cx='0' cy='-9' rx='4' ry='8' transform='rotate(247)'/><ellipse cx='0' cy='-9' rx='4' ry='8' transform='rotate(292)'/><ellipse cx='0' cy='-9' rx='4' ry='8' transform='rotate(337)'/></g><circle r='4.5' fill='%23ff2e93'/></g><g transform='translate(100,20)'><g fill='%238a2be2'><ellipse cx='0' cy='-9' rx='4' ry='8' transform='rotate(0)'/><ellipse cx='0' cy='-9' rx='4' ry='8' transform='rotate(45)'/><ellipse cx='0' cy='-9' rx='4' ry='8' transform='rotate(90)'/><ellipse cx='0' cy='-9' rx='4' ry='8' transform='rotate(135)'/><ellipse cx='0' cy='-9' rx='4' ry='8' transform='rotate(180)'/><ellipse cx='0' cy='-9' rx='4' ry='8' transform='rotate(225)'/><ellipse cx='0' cy='-9' rx='4' ry='8' transform='rotate(270)'/><ellipse cx='0' cy='-9' rx='4' ry='8' transform='rotate(315)'/></g><circle r='4.5' fill='%23ffe600'/></g></svg>") repeat-x left center}
+[data-theme="groovy"] .col-head::after{content:"";position:absolute;right:-8px;bottom:-12px;width:64px;height:64px;background:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='40' height='40' viewBox='0 0 40 40'><g transform='translate(20,20)'><g fill='%23ffffff'><ellipse cx='0' cy='-9' rx='4' ry='8' transform='rotate(0)'/><ellipse cx='0' cy='-9' rx='4' ry='8' transform='rotate(45)'/><ellipse cx='0' cy='-9' rx='4' ry='8' transform='rotate(90)'/><ellipse cx='0' cy='-9' rx='4' ry='8' transform='rotate(135)'/><ellipse cx='0' cy='-9' rx='4' ry='8' transform='rotate(180)'/><ellipse cx='0' cy='-9' rx='4' ry='8' transform='rotate(225)'/><ellipse cx='0' cy='-9' rx='4' ry='8' transform='rotate(270)'/><ellipse cx='0' cy='-9' rx='4' ry='8' transform='rotate(315)'/></g><circle r='4.5' fill='%23ffe600'/></g></svg>") no-repeat center/contain;opacity:.35;pointer-events:none}
+[data-theme="metal"] .col-head{border-bottom:2px solid #000}
+[data-theme="metal"] header::after{content:"";display:block;height:3px;margin-top:16px;background:linear-gradient(90deg,#d11a1a,#3a0606 60%,transparent)}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+[hidden]{display:none!important}
+html,body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",Roboto,sans-serif}
+body{padding:env(safe-area-inset-top) 0 calc(90px + env(safe-area-inset-bottom))}
+button{font:inherit;color:inherit;border:0;background:none;cursor:pointer}
+input,textarea,select{font:inherit;color:var(--text);background:var(--panel2);border:1px solid var(--line);border-radius:12px;padding:12px 14px;width:100%;outline:none}
+input:focus,textarea:focus{border-color:var(--accent)}
+.wrap{padding:0 16px;max-width:1400px;margin:0 auto}
+
+/* hero */
+header{padding:26px 0 8px}
+.eyebrow{font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted)}
+h1,.yearhead h3,.col-head h4,.sheet h2,.stat b{font-family:var(--head-font);text-transform:var(--head-case);letter-spacing:var(--head-track);font-weight:var(--head-weight)}
+h1{margin:6px 0 0;font-size:clamp(32px,7vw,56px);line-height:1;
+  background:var(--title-grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+.intro{margin:12px 0 0;color:var(--muted);max-width:560px;line-height:1.45;font-size:15px}
+.rename{margin-top:8px;font-size:13px;font-weight:700;color:var(--muted);padding:4px 0;text-decoration:underline;text-underline-offset:3px}
+.sample-note{margin-top:12px;padding:10px 14px;background:var(--note-bg);border:1px solid var(--note-border);color:var(--note-text);border-radius:12px;font-size:14px;display:flex;gap:10px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+.sample-note button{background:var(--note-btn);color:var(--note-btn-text);padding:6px 12px;border-radius:999px;font-weight:700;font-size:13px}
+
+/* stats */
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:18px 0}
+.stat{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:14px}
+.stat b{display:block;font-size:clamp(24px,5vw,36px);font-weight:800;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.stat span{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.1em}
+@media(max-width:640px){.stats{grid-template-columns:repeat(2,1fr)}}
+
+/* top artists */
+.section-title{display:flex;align-items:baseline;justify-content:space-between;margin:22px 0 10px}
+.section-title h2{margin:0;font-size:15px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:700}
+.top{display:flex;gap:8px;overflow-x:auto;padding-bottom:6px;scrollbar-width:none}
+.top::-webkit-scrollbar{display:none}
+.chip-artist{flex:0 0 auto;background:var(--panel);border:1px solid var(--line);border-radius:var(--pill);padding:8px 14px;font-size:14px;display:flex;gap:8px;align-items:center}
+.chip-artist i{font-style:normal;background:var(--accent);color:var(--on-accent);border-radius:999px;padding:1px 8px;font-weight:800;font-size:12px}
+
+/* controls */
+.controls{position:sticky;top:0;z-index:20;background:linear-gradient(var(--bg) 82%,transparent);padding:10px 0 14px;margin-top:6px}
+.search{position:relative}
+.search input{padding-left:42px;border-radius:var(--pill);background:var(--panel)}
+.search svg{position:absolute;left:15px;top:50%;transform:translateY(-50%);opacity:.6}
+.years{display:flex;gap:8px;overflow-x:auto;margin-top:10px;scrollbar-width:none}
+.years::-webkit-scrollbar{display:none}
+.year{flex:0 0 auto;padding:9px 16px;border-radius:var(--pill);background:var(--panel);border:1px solid var(--line);font-weight:700;font-size:14px;color:var(--muted)}
+.year.on{background:var(--chip-on-bg);color:var(--chip-on-text);border-color:var(--chip-on-bg)}
+
+/* board */
+.yearblock{margin:8px 0 26px}
+.yearhead{display:flex;align-items:baseline;gap:12px;margin:0 0 10px}
+.yearhead h3{margin:0;font-size:44px;font-weight:800;letter-spacing:-.03em}
+.yearhead small{color:var(--muted);font-size:13px}
+.board{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x proximity;padding:2px 0 12px;-webkit-overflow-scrolling:touch}
+.col{flex:0 0 min(78vw,290px);scroll-snap-align:start;background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;align-self:flex-start}
+.col-head{padding:14px 14px 12px;color:#fff;position:relative}
+.col-head h4{margin:0;font-size:18px;font-weight:800;letter-spacing:-.01em;text-shadow:0 1px 8px rgba(0,0,0,.35)}
+.col-head p{margin:3px 0 0;font-size:12px;opacity:.85}
+.day{border-top:1px solid var(--line)}
+.day-head{width:100%;text-align:left;padding:10px 14px;font-weight:700;font-size:13px;display:flex;justify-content:space-between;align-items:center;gap:8px}
+.day-head em{font-style:normal;opacity:.7;font-size:12px;font-weight:600}
+.artists{list-style:none;margin:0;padding:6px 6px 10px}
+.artists li{margin:0}
+.artist{width:100%;text-align:left;padding:8px 10px;border-radius:10px;font-size:15px;transition:background .15s,opacity .15s}
+.artist:active{background:var(--panel2)}
+.artist.rep::after{content:attr(data-n);float:right;font-size:11px;font-weight:800;border-radius:999px;padding:1px 7px;margin-top:2px;background:var(--panel2);color:var(--muted)}
+.dim{opacity:.18}
+.artist.clip::before{content:"";display:inline-block;width:0;height:0;border-left:8px solid var(--accent);border-top:5px solid transparent;border-bottom:5px solid transparent;margin-right:8px;vertical-align:middle;position:relative;top:-1px}
+.appearwrap{margin-bottom:14px}
+.appearwrap .appear{margin-bottom:6px}
+.note{margin:6px 2px;color:var(--text);opacity:.85;font-size:14px;line-height:1.4;white-space:pre-wrap}
+.clipframe{width:100%;height:380px;border:0;border-radius:12px;background:#000;margin:6px 0;display:block}
+video.clipframe{height:auto;max-height:70vh}
+img.clipframe{height:auto;max-height:70vh;object-fit:contain}
+.cliplink{display:inline-block;margin:6px 6px 0 0;padding:9px 14px;border-radius:999px;background:var(--panel2);border:1px solid var(--line);color:var(--text);text-decoration:none;font-weight:700;font-size:14px}
+.smallbtn{font-size:13px;font-weight:700;color:var(--accent);padding:6px 2px}
+.hit{background:var(--hit-bg);outline:1px solid var(--hit-line)}
+.addcol{flex:0 0 120px;align-self:stretch;min-height:140px;border:1.5px dashed var(--line);border-radius:var(--radius);color:var(--muted);font-weight:700;display:flex;flex-direction:column;gap:6px;align-items:center;justify-content:center}
+.empty{padding:50px 10px;text-align:center;color:var(--muted)}
+
+/* FAB + toolbar */
+.dock{position:fixed;left:0;right:0;bottom:0;padding:10px 16px calc(14px + env(safe-area-inset-bottom));display:flex;gap:10px;justify-content:center;z-index:30;background:linear-gradient(transparent,var(--bg) 40%)}
+.themeopt{width:100%;text-align:left;border:2px solid var(--line);border-radius:var(--radius);padding:14px;margin-bottom:10px;display:block}
+.themeopt.on{border-color:var(--accent)}
+.themeopt b{display:block;font-size:17px;margin-bottom:2px}
+.themeopt small{display:block;opacity:.75;margin-bottom:10px}
+.themeopt .sws{display:flex;gap:6px}
+.themeopt .sws i{width:26px;height:26px;border-radius:50%;display:block}
+.btn{padding:14px 20px;border-radius:var(--pill);font-weight:800;background:var(--panel2);border:1px solid var(--line)}
+.btn.primary{background:var(--primary-grad);color:var(--on-primary);border:0;box-shadow:var(--primary-shadow)}
+.btn.danger{color:var(--danger)}
+
+/* sheet */
+.scrim{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:40;opacity:0;pointer-events:none;transition:opacity .2s}
+.scrim.on{opacity:1;pointer-events:auto}
+.sheet{position:fixed;left:0;right:0;bottom:0;max-height:88vh;overflow:auto;background:var(--panel);border-top-left-radius:24px;border-top-right-radius:24px;border:1px solid var(--line);z-index:50;padding:12px 18px calc(24px + env(safe-area-inset-bottom));transform:translateY(105%);transition:transform .28s cubic-bezier(.2,.9,.3,1);max-width:640px;margin:0 auto}
+.sheet.on{transform:none}
+.grab{width:44px;height:5px;border-radius:9px;background:var(--line);margin:0 auto 14px}
+.sheet h2{margin:0 0 4px;font-size:26px;letter-spacing:-.02em}
+.sheet .sub{color:var(--muted);margin:0 0 14px;font-size:14px}
+.appear{display:flex;gap:12px;align-items:center;padding:12px;border-radius:12px;background:var(--panel2);margin-bottom:8px}
+.dot{width:12px;height:36px;border-radius:6px;flex:0 0 auto}
+.appear b{display:block}
+.appear span{color:var(--muted);font-size:13px}
+label{display:block;font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin:14px 0 6px}
+.row{display:grid;grid-template-columns:1fr 110px;gap:10px}
+.swatches{display:flex;gap:8px;flex-wrap:wrap}
+.sw{width:30px;height:30px;border-radius:50%;border:2px solid transparent}
+.sw.on{border-color:var(--text)}
+.actions{display:flex;gap:10px;margin-top:18px}
+.actions .btn{flex:1}
+.hint{font-size:12px;color:var(--muted);margin-top:6px}
+.wizcard{width:100%;text-align:left;background:var(--panel2);border:1px solid var(--line);border-radius:var(--radius);padding:14px 16px;margin-bottom:10px;display:block}
+.wizcard b{display:block;font-size:17px}
+.wizcard small{display:block;color:var(--muted);margin-top:3px;font-size:13px}
+.wizcard.dashed{background:transparent;border:1.5px dashed var(--line)}
+.wizcard:active{transform:scale(.99)}
+.wizday{margin-top:18px}
+.wizdayhead{display:flex;justify-content:space-between;align-items:center;position:sticky;top:-12px;background:var(--panel);padding:8px 0;z-index:2}
+.wizdayhead b{font-size:18px}
+.picks{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+.pick{padding:9px 13px;border-radius:var(--pill);background:var(--panel2);border:1.5px solid var(--line);font-size:14px}
+.pick.on{background:var(--accent);border-color:var(--accent);color:var(--on-accent);font-weight:700}
+.pick.on::before{content:"✓ "}
+.addrow{display:flex;gap:8px;margin-top:10px}
+.addrow input{padding:10px 14px}
+.addrow .btn{padding:10px 16px}
+.wizfoot{position:sticky;bottom:-12px;display:flex;gap:10px;margin:18px -18px -12px;padding:12px 18px calc(12px + env(safe-area-inset-bottom));background:var(--panel);border-top:1px solid var(--line);z-index:3}
+.wizfoot .btn{flex:1}
+.wizfoot .btn:first-child{flex:0 0 auto}
+.btn:disabled{opacity:.45}
+.toast{position:fixed;left:50%;bottom:calc(96px + env(safe-area-inset-bottom));transform:translate(-50%,20px);background:var(--text);color:var(--bg);padding:12px 18px;border-radius:999px;font-weight:700;font-size:14px;opacity:0;pointer-events:none;transition:all .25s;z-index:80;max-width:90vw;text-align:center}
+.toast.on{opacity:1;transform:translate(-50%,0)}
+.aibox{border:1.5px solid var(--accent);border-radius:var(--radius);padding:14px;margin:16px 0 8px}
+.aibox b{font-size:16px}
+.aibtns{display:flex;gap:8px;flex-wrap:wrap}
+.aibtns .btn{padding:10px 14px;font-size:14px}
+.aibtns a.btn{color:var(--text)}
+.ver{margin:28px 0 8px;text-align:center;font-size:12px;color:var(--muted);letter-spacing:.08em}
+.wkbadge{display:inline-block;margin:6px 0 0;padding:2px 9px;border-radius:999px;background:rgba(0,0,0,.38);color:#fff;font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase}
+.day-head{cursor:pointer}
+.day-head .pen{opacity:.6;margin-left:6px}
+
+@media print{
+  html[data-theme]{--bg:#fff;--panel:#fff;--panel2:#f1f1f4;--line:#d6d6dc;--text:#111;--muted:#555;--title-grad:linear-gradient(#111,#111);--accent:#111;--on-accent:#fff;--head-font:inherit;--head-case:none}
+  html,body{background:#fff!important;color:#111;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  body{padding:0}
+  .dock,.toast,.scrim,.sheet,.controls,.top,.section-title,.intro,.rename,.sample-note,#tip,.stats .stat span+*{display:none!important}
+  .wrap{padding:0;max-width:none}
+  header{padding:0 0 8px}
+  header::after{display:none!important}
+  h1{font-size:30px;-webkit-text-fill-color:#111;color:#111;background:none}
+  .stats{grid-template-columns:repeat(4,1fr);gap:8px;margin:8px 0 14px}
+  .stat{padding:8px 10px;border-radius:8px}
+  .stat b{font-size:20px}
+  .yearblock{margin:0 0 16px;break-inside:auto}
+  .yearhead{break-after:avoid}
+  .yearhead h3{font-size:26px}
+  .board{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;overflow:visible;padding:0}
+  .col{flex:none;width:auto;align-self:start;break-inside:auto;border-radius:8px}
+  .col-head{padding:8px 10px;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .col-head h4{font-size:14px}
+  .col-head button{display:none!important}
+  .day{break-inside:avoid}
+  .day-head{padding:5px 10px;font-size:11px;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .day-head .pen{display:none}
+  .artists{padding:2px 4px 6px}
+  .artist{padding:2px 6px;font-size:11px;line-height:1.25}
+  .artist.rep::after{font-size:9px;padding:0 5px;margin-top:0}
+  .artist.dim{opacity:1}.artist.hit{outline:none;background:none}
+  .artist.clip::before{border-left-width:6px;border-top-width:4px;border-bottom-width:4px;margin-right:5px}
+  @page{margin:12mm}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="eyebrow">Every show. Every artist.</div>
+    <h1 id="title">Show History</h1>
+    <p class="intro" id="intro">Log every festival and show you've been to, day by day, and every artist you caught. Your list saves privately in this browser.</p>
+    <button class="rename" id="renameBtn">Rename</button> <button class="rename" id="themeBtn" style="margin-left:14px">Theme</button>
+    <div id="viewNote" class="sample-note" hidden></div>
+    <div id="sampleNote" class="sample-note" hidden>
+      <span>Showing made-up sample data so you can play with it.</span>
+      <button id="clearSample">Clear sample &amp; start mine</button>
+    </div>
+  </header>
+
+  <section class="stats" id="stats"></section>
+
+  <div class="section-title"><h2>Most seen</h2><span class="hint" style="margin:0">tap to see every time</span></div>
+  <div class="top" id="top"></div>
+
+  <div class="controls">
+    <div class="search">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+      <input id="q" type="search" placeholder="Find an artist..." autocomplete="off" autocapitalize="off" spellcheck="false">
+    </div>
+    <div class="years" id="years"></div>
+  </div>
+
+  <p class="hint" id="tip" style="margin:0 0 8px"></p>
+  <main id="main"></main>
+  <footer class="ver" id="ver"></footer>
+</div>
+
+<div class="dock">
+  <button class="btn" id="menuBtn">Export</button>
+  <button class="btn" id="shareBtn">Share</button>
+  <button class="btn primary" id="addBtn">+ Add show</button>
+  <a class="btn primary" id="mineBtn" href="#" hidden style="text-decoration:none">Make your own</a>
+</div>
+
+<div class="toast" id="toast"></div>
+<div class="scrim" id="scrim"></div>
+<div class="sheet" id="sheet" role="dialog" aria-modal="true"><div class="grab"></div><div id="sheetBody"></div></div>
+
+<script>
+(function(){
+"use strict";
+var KEY="showHistory.v1";
+var APP_VERSION="1.0",APP_DATE="November 2026";
+var THEMES={
+ neon:{name:"Neon",tag:"Dark with glow. The original.",bg:"#07070d",fg:"#f2f2f8",palette:["#7c3aed","#2563eb","#0891b2","#059669","#65a30d","#ca8a04","#ea580c","#dc2626","#db2777","#c026d3","#4f46e5","#0d9488"]},
+ metal:{name:"Heavy Metal",tag:"Black, blood red and steel.",bg:"#080808",fg:"#ebe6de",palette:["#9b0f0f","#c01818","#5c606a","#7b8089","#3d4148","#a1582a","#6e1f1f","#8a8372","#4a4e56","#933a16","#2f3136","#7d1d3a"]},
+ groovy:{name:"Groovy",tag:"Flower power: hot pink, green, purple.",bg:"#fff3fb",fg:"#3a0f33",palette:["#ff2e93","#12b76a","#ff6b1a","#8a2be2","#00a3c4","#d6249f","#3fae2a","#f08a00","#e6007a","#00875a","#a74bf3","#ff4d4d"]},
+ plain:{name:"Plain",tag:"Clean white. No fuss.",bg:"#ffffff",fg:"#111114",palette:["#2563eb","#0f766e","#b45309","#7c3aed","#be123c","#475569","#15803d","#c2410c","#0369a1","#9333ea","#a16207","#334155"]}
+};
+var THEME_KEY="showHistory.theme";
+var theme="neon";
+try{var tv=localStorage.getItem(THEME_KEY);if(tv&&THEMES[tv])theme=tv;}catch(e){}
+function PAL(){return THEMES[theme].palette;}
+function applyTheme(){document.documentElement.setAttribute("data-theme",theme);var m=document.querySelector('meta[name="theme-color"]');if(!m){m=document.createElement("meta");m.name="theme-color";document.head.appendChild(m);}m.content=THEMES[theme].bg;}
+applyTheme();
+
+/* ---------- storage (safe) ---------- */
+var mem=null;
+function load(){
+  try{var r=localStorage.getItem(KEY);if(r)return JSON.parse(r);}catch(e){}
+  return mem;
+}
+function save(){
+  mem=state;
+  try{localStorage.setItem(KEY,JSON.stringify(state));}catch(e){}
+}
+
+/* ---------- sample data (fictional) ---------- */
+function sample(){
+  return {sample:true,colors:{"Neon Meadow":0,"Desert Static":6,"Harbor Lights":2,"Pine Echo":3},
+  shows:[
+   {id:"s1",year:2024,festival:"Neon Meadow",location:"Open Fields, Somewhere, CA",days:[
+     {label:"Fri June 14",artists:["Vela Moon","Kito Drift","Static Garden","Orchid Atlas"]},
+     {label:"Sat June 15",artists:["Juno Vale","Kito Drift","The Halogens","Mara Quill","Dusk Parade"]}]},
+   {id:"s2",year:2024,festival:"Desert Static",location:"Dry Lake Bed, NV",days:[
+     {label:"Thu Sept 5",artists:["Orchid Atlas","Brass Lantern","Nova Kline"]},
+     {label:"Fri Sept 6",artists:["Vela Moon","Sundial","Mara Quill","Cobalt Choir"]}]},
+   {id:"s3",year:2023,festival:"Neon Meadow",location:"Open Fields, Somewhere, CA",days:[
+     {label:"Sat June 17",artists:["Kito Drift","Juno Vale","Paper Tigers","Orchid Atlas"]}]},
+   {id:"s4",year:2023,festival:"Harbor Lights",location:"Pier 9, Waterfront",days:[
+     {label:"Fri Aug 11",artists:["Sundial","Nova Kline","Tidewater"]},
+     {label:"Sat Aug 12",artists:["Cobalt Choir","Vela Moon","Tidewater","Dusk Parade"]}]},
+   {id:"s5",year:2022,festival:"Pine Echo",location:"Cedar Basin, OR",days:[
+     {label:"Fri July 8",artists:["Brass Lantern","The Halogens","Paper Tigers"]},
+     {label:"Sat July 9",artists:["Static Garden","Juno Vale","Kito Drift"]}]}
+  ]};
+}
+var ui={year:"all",q:"",view:false};
+var state=null;
+
+/* ---------- share links ---------- */
+function b64u(bytes){var s="";for(var i=0;i<bytes.length;i++)s+=String.fromCharCode(bytes[i]);return btoa(s).replace(/\+/g,"-").replace(/\//g,"_").replace(/=+$/,"");}
+function unb64u(str){str=str.replace(/-/g,"+").replace(/_/g,"/");while(str.length%4)str+="=";var bin=atob(str),a=new Uint8Array(bin.length);for(var i=0;i<bin.length;i++)a[i]=bin.charCodeAt(i);return a;}
+function pipe(stream,bytes){var w=stream.writable.getWriter();w.write(bytes);w.close();return new Response(stream.readable).arrayBuffer();}
+function encodeShare(obj){
+  var raw=new TextEncoder().encode(JSON.stringify({t:obj.title||"",c:obj.colors,s:obj.shows}));
+  if(typeof CompressionStream==="function"){
+    return pipe(new CompressionStream("deflate-raw"),raw).then(function(buf){return "z"+b64u(new Uint8Array(buf));},function(){return "p"+b64u(raw);});
+  }
+  return Promise.resolve("p"+b64u(raw));
+}
+function decodeShare(str){
+  var kind=str.charAt(0),bytes=unb64u(str.slice(1));
+  function parse(u8){var o=JSON.parse(new TextDecoder().decode(u8));return {sample:false,title:o.t||"",colors:o.c||{},shows:o.s||[]};}
+  if(kind==="z"){return pipe(new DecompressionStream("deflate-raw"),bytes).then(function(b){return parse(new Uint8Array(b));});}
+  return Promise.resolve(parse(bytes));
+}
+
+/* ---------- helpers ---------- */
+function $(id){return document.getElementById(id);}
+function el(tag,cls,txt){var e=document.createElement(tag);if(cls)e.className=cls;if(txt!=null)e.textContent=txt;return e;}
+function norm(s){return String(s).trim().toLowerCase();}
+function uid(){return "s"+Date.now().toString(36)+Math.random().toString(36).slice(2,6);}
+function colorFor(name){
+  var v=state.colors[name];
+  if(v===undefined){v=Object.keys(state.colors).length%12;state.colors[name]=v;}
+  return typeof v==="number"?PAL()[v%PAL().length]:v;
+}
+function shade(hex,amt){ // darken for gradient
+  var n=parseInt(hex.slice(1),16),r=n>>16,g=(n>>8)&255,b=n&255;
+  r=Math.max(0,Math.min(255,r+amt));g=Math.max(0,Math.min(255,g+amt));b=Math.max(0,Math.min(255,b+amt));
+  return "#"+((1<<24)+(r<<16)+(g<<8)+b).toString(16).slice(1);
+}
+function allSets(){ // artist -> appearances
+  var map={};
+  state.shows.forEach(function(s){s.days.forEach(function(d){d.artists.forEach(function(a){
+    var k=norm(a);(map[k]=map[k]||{name:a,list:[]}).list.push({year:s.year,festival:s.festival,day:d.label,showId:s.id,weekend:s.weekend||"",dayRef:d});
+  });});});
+  return map;
+}
+
+/* ---------- render ---------- */
+function render(){
+  var t=state.title||"Show History";
+  $("title").textContent=t;document.title=t;
+  $("sampleNote").hidden=!state.sample||ui.view;
+  $("viewNote").hidden=!ui.view;
+  $("intro").hidden=ui.view;
+  $("renameBtn").hidden=ui.view;
+  $("addBtn").hidden=ui.view;$("menuBtn").hidden=ui.view;$("mineBtn").hidden=!ui.view;
+  $("shareBtn").hidden=ui.view&&false;
+  var map=allSets();
+  var years=Array.from(new Set(state.shows.map(function(s){return s.year;}))).sort(function(a,b){return b-a;});
+  if(ui.year!=="all"&&years.indexOf(ui.year)<0)ui.year="all";
+
+  // stats
+  var days=0;state.shows.forEach(function(s){days+=s.days.length;});
+  var fests=new Set(state.shows.map(function(s){return norm(s.festival);})).size;
+  var uniq=Object.keys(map).length;
+  var st=$("stats");st.textContent="";
+  [[state.shows.length,"Festivals / shows"],[days,"Days out"],[uniq,"Unique artists"],[fests,"Different events"]].forEach(function(x){
+    var d=el("div","stat");d.appendChild(el("b",null,x[0]));d.appendChild(el("span",null,x[1]));st.appendChild(d);
+  });
+
+  // top artists
+  var top=Object.keys(map).map(function(k){return map[k];}).filter(function(a){return a.list.length>1;})
+    .sort(function(a,b){return b.list.length-a.list.length||a.name.localeCompare(b.name);}).slice(0,12);
+  var tp=$("top");tp.textContent="";
+  if(!top.length)tp.appendChild(el("div","hint","Artists you've seen more than once show up here."));
+  top.forEach(function(a){
+    var b=el("button","chip-artist");b.appendChild(el("span",null,a.name));b.appendChild(el("i",null,"×"+a.list.length));
+    b.onclick=function(){openArtist(a.name);};tp.appendChild(b);
+  });
+
+  // year chips
+  var yr=$("years");yr.textContent="";
+  [["all","All years"]].concat(years.map(function(y){return [y,String(y)];})).forEach(function(p){
+    var b=el("button","year"+(ui.year===p[0]?" on":""),p[1]);
+    b.onclick=function(){ui.year=p[0];render();window.scrollTo({top:document.querySelector(".controls").offsetTop-4,behavior:"smooth"});};
+    yr.appendChild(b);
+  });
+
+  // board
+  $("tip").textContent=ui.view?"Tap an artist to see every time they played.":(state.shows.length?"Tip: tap a day header to edit it, “✎ Edit” for the whole festival, or an artist to see every time you saw them.":"");
+  var main=$("main");main.textContent="";
+  var q=norm(ui.q);
+  var shown=years.filter(function(y){return ui.year==="all"||ui.year===y;});
+  if(!shown.length){
+    var e=el("div","empty","Nothing here yet. Tap “+ Add show” to log your first one.");main.appendChild(e);return;
+  }
+  var totalHits=0;
+  shown.forEach(function(y){
+    var block=el("section","yearblock");
+    var shows=state.shows.filter(function(s){return s.year===y;});
+    var head=el("div","yearhead");head.appendChild(el("h3",null,y));
+    var n=0;shows.forEach(function(s){s.days.forEach(function(d){n+=d.artists.length;});});
+    head.appendChild(el("small",null,shows.length+" event"+(shows.length>1?"s":"")+" · "+n+" sets"));
+    block.appendChild(head);
+    var board=el("div","board");
+    shows.forEach(function(s){
+      var c=colorFor(s.festival);
+      var col=el("div","col");
+      var h=el("div","col-head");h.style.background="linear-gradient(160deg,"+c+","+shade(c,-60)+")";
+      h.appendChild(el("h4",null,s.festival));if(s.weekend)h.appendChild(el("span","wkbadge",s.weekend));if(s.location)h.appendChild(el("p",null,s.location));
+      var eb=el("button",null,"✎ Edit");eb.style.cssText="position:absolute;right:10px;top:10px;font-size:12px;font-weight:700;background:rgba(0,0,0,.3);padding:4px 10px;border-radius:999px";
+      eb.onclick=function(){openEdit(s.id);};if(!ui.view)h.appendChild(eb);
+      col.appendChild(h);
+      s.days.forEach(function(d,di){
+        var day=el("div","day");
+        var dh=el("div","day-head");dh.style.background=c+"33";dh.style.color="var(--text)";dh.style.borderLeft="4px solid "+c;
+        dh.appendChild(el("span",null,d.label));var em=el("em",null,d.artists.length+(d.artists.length===1?" set":" sets"));if(!ui.view)em.appendChild(el("span","pen","✎"));dh.appendChild(em);if(!ui.view)dh.onclick=function(){openEdit(s.id,di);};
+        day.appendChild(dh);
+        var ul=el("ul","artists");
+        d.artists.forEach(function(a){
+          var li=el("li");var b=el("button","artist",a);
+          var cnt=map[norm(a)].list.length;
+          if(cnt>1){b.classList.add("rep");b.setAttribute("data-n","×"+cnt);}
+          var mt=d.meta&&d.meta[norm(a)];if(mt&&mt.clips&&mt.clips.length)b.classList.add("clip");
+          if(q){if(norm(a).indexOf(q)>-1){b.classList.add("hit");totalHits++;}else b.classList.add("dim");}
+          b.onclick=function(){openArtist(a);};
+          li.appendChild(b);ul.appendChild(li);
+        });
+        day.appendChild(ul);col.appendChild(day);
+      });
+      board.appendChild(col);
+    });
+    block.appendChild(board);main.appendChild(block);
+  });
+  if(q&&!totalHits){main.insertBefore(el("div","empty","No artist matching “"+ui.q+"” in this view."),main.firstChild);}
+}
+
+/* ---------- sheet ---------- */
+function openSheet(node){var b=$("sheetBody");b.textContent="";b.appendChild(node);$("scrim").classList.add("on");$("sheet").classList.add("on");$("sheet").scrollTop=0;}
+function closeSheet(){$("scrim").classList.remove("on");$("sheet").classList.remove("on");}
+$("scrim").onclick=closeSheet;
+
+function safeUrl(u){u=String(u||"").trim();if(!u)return null;if(/^https?:\/\//i.test(u))return u;if(/^[\w\-.\/%]+$/.test(u))return u;return null;}
+function clipNode(url){
+  var u=safeUrl(url);if(!u)return null;var m,n;
+  if((m=/drive\.google\.com\/file\/d\/([\w-]+)/.exec(u))||(m=/drive\.google\.com\/open\?id=([\w-]+)/.exec(u))){
+    n=el("iframe","clipframe");n.src="https://drive.google.com/file/d/"+m[1]+"/preview";n.setAttribute("allow","autoplay; fullscreen");n.setAttribute("allowfullscreen","");n.loading="lazy";return n;}
+  if((m=/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|shorts\/|embed\/))([\w-]{6,})/.exec(u))){
+    n=el("iframe","clipframe");n.src="https://www.youtube-nocookie.com/embed/"+m[1];n.setAttribute("allow","autoplay; fullscreen; picture-in-picture");n.setAttribute("allowfullscreen","");n.loading="lazy";return n;}
+  if(/\.(mp4|mov|m4v|webm)(\?.*)?$/i.test(u)){n=el("video","clipframe");n.src=u;n.controls=true;n.setAttribute("playsinline","");n.preload="metadata";return n;}
+  if(/\.(jpe?g|png|webp|gif|avif)(\?.*)?$/i.test(u)){n=el("img","clipframe");n.src=u;n.loading="lazy";n.alt="";return n;}
+  n=el("a","cliplink","Open clip ↗");n.href=u;n.target="_blank";n.rel="noopener noreferrer";return n;
+}
+function openClipEditor(dayRef,name){
+  var key=norm(name),cur=(dayRef.meta&&dayRef.meta[key])||{};
+  var box=el("div");box.appendChild(el("h2",null,name));box.appendChild(el("p","sub","Clips and notes for this set"));
+  box.appendChild(el("label",null,"Note"));
+  var note=el("textarea");note.rows=3;note.placeholder="Front row, unreleased track, etc.";note.value=cur.note||"";box.appendChild(note);
+  box.appendChild(el("label",null,"Clip links (one per line)"));
+  var links=el("textarea");links.rows=4;links.placeholder="https://drive.google.com/file/d/.../view\nmedia/kito-drift.mp4";links.value=(cur.clips||[]).join("\n");box.appendChild(links);
+  box.appendChild(el("p","hint","Works with Google Drive links (set sharing to “Anyone with the link”), YouTube links, and direct .mp4 / photo links or files in your GitHub repo. TikTok and Instagram links open in their app."));
+  var a=el("div","actions");var c=el("button","btn","Cancel");c.onclick=function(){openArtist(name);};
+  var ok=el("button","btn primary","Save");ok.onclick=function(){
+    var clips=links.value.split(/\n+/).map(function(x){return x.trim();}).filter(function(x){return safeUrl(x);});
+    dayRef.meta=dayRef.meta||{};
+    if(!note.value.trim()&&!clips.length)delete dayRef.meta[key];else dayRef.meta[key]={note:note.value.trim(),clips:clips};
+    save();render();openArtist(name);
+  };
+  a.appendChild(c);a.appendChild(ok);box.appendChild(a);openSheet(box);
+}
+function openArtist(name){
+  var m=allSets()[norm(name)];if(!m)return;
+  var box=el("div");
+  box.appendChild(el("h2",null,m.name));
+  box.appendChild(el("p","sub","Seen "+m.list.length+" time"+(m.list.length>1?"s":"")));
+  m.list.sort(function(a,b){return b.year-a.year;}).forEach(function(x){
+    var wrap=el("div","appearwrap");
+    var r=el("div","appear");var dot=el("div","dot");dot.style.background=colorFor(x.festival);r.appendChild(dot);
+    var t=el("div");t.appendChild(el("b",null,x.festival+" "+x.year+(x.weekend?" · "+x.weekend:"")));t.appendChild(el("span",null,x.day));r.appendChild(t);wrap.appendChild(r);
+    var mt=x.dayRef.meta&&x.dayRef.meta[norm(m.name)];
+    if(mt&&mt.note)wrap.appendChild(el("div","note",mt.note));
+    if(mt&&mt.clips)mt.clips.forEach(function(u){var cn=clipNode(u);if(cn)wrap.appendChild(cn);});
+    if(!ui.view){var eb=el("button","smallbtn",mt?"Edit clips & note":"+ Add clip or note");eb.onclick=function(){openClipEditor(x.dayRef,m.name);};wrap.appendChild(eb);}
+    box.appendChild(wrap);
+  });
+  var a=el("div","actions");var f=el("button","btn","Highlight everywhere");f.onclick=function(){ui.q=m.name;$("q").value=m.name;closeSheet();render();};
+  var c=el("button","btn","Close");c.onclick=closeSheet;a.appendChild(f);a.appendChild(c);box.appendChild(a);
+  openSheet(box);
+}
+
+/* add / edit */
+function openEdit(id,startDay){
+  var existing=id?state.shows.filter(function(s){return s.id===id;})[0]:null;
+  var box=el("div");
+  box.appendChild(el("h2",null,existing?"Edit show":"Add a show"));
+  box.appendChild(el("p","sub",existing?"Pick which day to change below. You can also set the weekend, rename it, or delete it.":"One day at a time. Add more days later under the same festival."));
+
+  function field(lbl,node){box.appendChild(el("label",null,lbl));box.appendChild(node);return node;}
+  var dl=el("datalist");dl.id="festlist";
+  Array.from(new Set(state.shows.map(function(s){return s.festival;}))).forEach(function(f){var o=el("option");o.value=f;dl.appendChild(o);});
+  box.appendChild(dl);
+
+  var fest=el("input");fest.setAttribute("list","festlist");fest.placeholder="e.g. Coachella";
+  var year=el("input");year.type="number";year.inputMode="numeric";year.value=existing?existing.year:new Date().getFullYear();
+  var wrapRow=el("div","row");
+  var left=el("div");left.appendChild(el("label",null,"Festival / show"));left.appendChild(fest);
+  var right=el("div");right.appendChild(el("label",null,"Year"));right.appendChild(year);
+  wrapRow.appendChild(left);wrapRow.appendChild(right);box.appendChild(wrapRow);
+
+  var loc=field("Location (optional)",el("input"));loc.placeholder="Venue, City";
+  var wk=field("Weekend (only if the festival runs more than one)",el("select"));
+  ["","Weekend 1","Weekend 2","Weekend 3"].forEach(function(w){var o=el("option",null,w||"Not applicable");o.value=w;wk.appendChild(o);});
+  var dayLabel=field("Day",el("input"));dayLabel.placeholder="e.g. Friday April 20th";
+  var arts=field("Artists (one per line, or separate with commas)",el("textarea"));arts.rows=7;
+  arts.placeholder="Artist one\nArtist two\nArtist three";
+
+  box.appendChild(el("label",null,"Color"));
+  var sw=el("div","swatches");var chosen=null;
+  PAL().forEach(function(c,ci){var s=el("button","sw");s.style.background=c;s.onclick=function(){chosen=ci;Array.prototype.forEach.call(sw.children,function(x){x.classList.remove("on");});s.classList.add("on");};sw.appendChild(s);});
+  box.appendChild(sw);
+
+  var dayIdx=0;
+  if(existing){
+    fest.value=existing.festival;loc.value=existing.location||"";
+    if(existing.weekend){if(["Weekend 1","Weekend 2","Weekend 3"].indexOf(existing.weekend)<0){var oo=el("option",null,existing.weekend);oo.value=existing.weekend;wk.appendChild(oo);}wk.value=existing.weekend;}
+    colorFor(existing.festival);var cv=state.colors[existing.festival];chosen=typeof cv==="number"?cv:null;
+    Array.prototype.forEach.call(sw.children,function(x,i){if(i===chosen)x.classList.add("on");});
+    // day picker
+    var sel=el("select");existing.days.forEach(function(d,i){var o=el("option",null,d.label);o.value=i;sel.appendChild(o);});
+    var o2=el("option",null,"+ Add another day");o2.value="new";sel.appendChild(o2);
+    sel.style.marginTop="6px";
+    var fill=function(){if(sel.value==="new"){dayLabel.value="";arts.value="";}else{var d=existing.days[+sel.value];dayLabel.value=d.label;arts.value=d.artists.join("\n");}};
+    sel.onchange=fill;if(startDay!=null&&startDay<existing.days.length)sel.value=String(startDay);fill();
+    box.insertBefore(el("label",null,"Which day"),dayLabel.previousSibling);
+    box.insertBefore(sel,dayLabel.previousSibling);
+    var origSel=sel;
+  }
+
+  var a=el("div","actions");
+  var save_=el("button","btn primary",existing?"Save":"Add");
+  var cancel=el("button","btn","Cancel");cancel.onclick=closeSheet;
+  save_.onclick=function(){
+    var f=fest.value.trim(),y=parseInt(year.value,10),dl2=dayLabel.value.trim()||"Day 1";
+    var list=arts.value.split(/[\n,]+/).map(function(x){return x.trim();}).filter(Boolean);
+    if(!f||!y){fest.style.borderColor="#ff7a8a";return;}
+    if(state.sample){state={sample:false,colors:{},shows:[]};}
+    if(chosen!=null)state.colors[f]=chosen;colorFor(f);
+    var target=existing;
+    if(!target){target=state.shows.filter(function(s){return s.year===y&&norm(s.festival)===norm(f)&&norm(s.weekend||"")===norm(wk.value);})[0];}
+    if(!target){target={id:uid(),year:y,festival:f,location:loc.value.trim(),days:[]};state.shows.push(target);}
+    target.year=y;target.festival=f;if(wk.value)target.weekend=wk.value;else delete target.weekend;if(loc.value.trim())target.location=loc.value.trim();
+    if(existing&&origSel&&origSel.value!=="new"){target.days[+origSel.value]={label:dl2,artists:list};}
+    else{var hit=target.days.filter(function(d){return norm(d.label)===norm(dl2);})[0];if(hit)hit.artists=list;else target.days.push({label:dl2,artists:list});}
+    save();closeSheet();render();
+  };
+  a.appendChild(cancel);a.appendChild(save_);box.appendChild(a);
+  if(existing){
+    var del=el("button","btn danger","Delete this day");del.style.marginTop="10px";del.style.width="100%";
+    del.onclick=function(){
+      if(origSel&&origSel.value!=="new"){existing.days.splice(+origSel.value,1);}
+      if(!existing.days.length){state.shows=state.shows.filter(function(s){return s!==existing;});}
+      save();closeSheet();render();
+    };
+    var delAll=el("button","btn danger","Delete entire festival entry");delAll.style.cssText="margin-top:8px;width:100%";
+    delAll.onclick=function(){state.shows=state.shows.filter(function(s){return s!==existing;});save();closeSheet();render();};
+    box.appendChild(del);box.appendChild(delAll);
+  }
+  openSheet(box);
+}
+
+/* backup */
+function csvCell(v){v=v==null?"":String(v);return /[",\n\r]/.test(v)?'"'+v.replace(/"/g,'""')+'"':v;}
+function downloadText(name,text,type){
+  var blob=new Blob([text],{type:type});var u=URL.createObjectURL(blob);var l=document.createElement("a");
+  l.href=u;l.download=name;document.body.appendChild(l);l.click();l.remove();setTimeout(function(){URL.revokeObjectURL(u);},4000);
+}
+function slug(){return (state.title||"show-history").toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"")||"show-history";}
+function exportSets(){
+  var rows=[["Year","Festival","Weekend","Location","Day","Artist","Note","Clip links"]];
+  state.shows.slice().sort(function(a,b){return b.year-a.year||a.festival.localeCompare(b.festival)||String(a.weekend||"").localeCompare(String(b.weekend||""));}).forEach(function(s){
+    s.days.forEach(function(d){d.artists.forEach(function(a){
+      var m=d.meta&&d.meta[norm(a)];
+      rows.push([s.year,s.festival,s.weekend||"",s.location||"",d.label,a,m&&m.note||"",m&&m.clips?m.clips.join(" | "):""]);
+    });});
+  });
+  downloadText(slug()+"-sets.csv","\uFEFF"+rows.map(function(r){return r.map(csvCell).join(",");}).join("\r\n"),"text/csv;charset=utf-8");
+}
+function exportArtists(){
+  var map=allSets();
+  var list=Object.keys(map).map(function(k){return map[k];}).sort(function(a,b){return b.list.length-a.list.length||a.name.localeCompare(b.name);});
+  var rows=[["Artist","Times seen","Where"]];
+  list.forEach(function(a){rows.push([a.name,a.list.length,a.list.slice().sort(function(x,y){return y.year-x.year;}).map(function(x){return x.festival+" "+x.year+(x.weekend?" ("+x.weekend+")":"")+" - "+x.day;}).join("; ")]);});
+  downloadText(slug()+"-artists.csv","\uFEFF"+rows.map(function(r){return r.map(csvCell).join(",");}).join("\r\n"),"text/csv;charset=utf-8");
+}
+function openBackup(){
+  var box=el("div");
+  box.appendChild(el("h2",null,"Export & backup"));
+  box.appendChild(el("p","sub","Take your list with you. Everything here stays on your device."));
+  function group(title,hint){box.appendChild(el("label",null,title));if(hint)box.appendChild(el("p","hint",hint));}
+  function btn(label,fn,primary){var b=el("button","btn"+(primary?" primary":""),label);b.style.cssText="width:100%;margin-top:8px";b.onclick=fn;box.appendChild(b);return b;}
+
+  group("Spreadsheet","Opens in Numbers, Excel or Google Sheets.");
+  btn("Download every set (.csv)",exportSets,true);
+  btn("Download artist totals (.csv)",exportArtists);
+
+  group("Print or PDF","Opens your device's print screen. Choose “Save as PDF” there. It prints whatever year you're viewing.");
+  btn("Print / save as PDF",function(){closeSheet();setTimeout(function(){window.print();},350);});
+
+  group("Backup","A copy you can restore later, including clips and notes.");
+  var inp=el("input");inp.type="file";inp.accept="application/json,.json";inp.hidden=true;
+  inp.onchange=function(){
+    var f=inp.files[0];if(!f)return;var r=new FileReader();
+    r.onload=function(){try{var d=JSON.parse(r.result);if(!d.shows||!Array.isArray(d.shows))throw 0;state=d;delete state.appVersion;state.colors=state.colors||{};state.sample=false;save();closeSheet();render();}catch(e){alert("That file doesn't look like a Show History backup.");}};
+    r.readAsText(f);
+  };
+  btn("Save backup file",function(){downloadText(slug()+"-backup.json",JSON.stringify(Object.assign({appVersion:APP_VERSION},state),null,2),"application/json");});
+  btn("Restore from backup file",function(){inp.click();});
+  box.appendChild(inp);
+  var close=el("button","btn","Close");close.style.cssText="width:100%;margin-top:18px";close.onclick=closeSheet;box.appendChild(close);
+  openSheet(box);
+}
+
+/*WIZ*/
+/* ---------- lineup wizard ---------- */
+var CATALOG=[{"id": "coachella", "name": "Coachella", "aliases": ["coachella valley", "indio"], "location": "Empire Polo Club, Indio, CA", "editions": [{"year": 2026, "weekends": [{"label": "Weekend 1", "dates": ["Friday April 10", "Saturday April 11", "Sunday April 12"]}, {"label": "Weekend 2", "dates": ["Friday April 17", "Saturday April 18", "Sunday April 19"]}], "days": [{"name": "Friday", "artists": ["Sabrina Carpenter", "The xx", "Anyma", "Teddy Swims", "Record Safari", "Disclosure", "Turnstile", "Dijon", "Lykke Li", "Tiffany Tyson", "Dabeull", "Central Cee", "Devo", "Ethel Cain", "Moby", "Blood Orange", "Slayyyter", "BINI", "Novasoul", "Sexyy Red", "KATSEYE", "Levity", "Hugel", "Marlon Hoffstadt", "Swae Lee", "Massio", "Youna", "Creepy Nuts", "Joyce Manor", "CMAT", "fakemink", "Holly Humberstone", "Joost", "NewDad", "Cahuilla Bird Singers and Dancers", "Bob Baker Marionettes", "Wednesday", "Hot Mulligan", "Fleshwater", "Ninajirachi", "The Two Lips", "Carolina Durante", "Febuary", "Doom Dave", "Cachirula & Loojan", "Not For Radio", "Groove Armada", "Kettama", "Prospa", "Gordo", "Max Styler", "Max Dean x Luke Dean", "Jessica Brankka", "Arodes", "Rossi x Chloé Caillet", "Sahar Z", "Deep Dish", "Tiga", "Pawsa"]}, {"name": "Saturday", "artists": ["Justin Bieber", "The Strokes", "Giveon", "Addison Rae", "Jaqck Glam", "Labrinth", "David Byrne", "Sombr", "Alex G", "Blondshell", "Los Hermanos Flores", ["Jack White", 1], ["Kacey Musgraves", 2], "Interpol", "Royel Otis", "Fujii Kaze", "Taemin", "PinkPantheress", "Nine Inch Noize", "Rezz", "Adriatique", "Worship", "Hamdi", "Zulan", "Seek-One", "Teed", "Yousuke Yukimatsu", "Davido", "Geese", "Luísa Sonza", "BIA", "Morat", "Noga Erez", "Whatmore", "Boys Noize", "Armin van Buuren x Adam Beyer", "Bedouin", "Mahmut Orhan", "Riordan", "Sosa", "Ben Sterling", "Genesi", "Yamagucci", "Ceremony", "Rusowsky", "54 Ultra", "Die Spitz", "Freak Slug", "Ecca Vandal", "Mind Enterprises", "Triste Juventud", "David Guetta", "Afrojack x Shimza", "Joezi"]}, {"name": "Sunday", "artists": ["Karol G", "Young Thug", "Major Lazer", "Wet Leg", "Gabe Real", "Tijuana Panthers", "Clipse", "Foster the People", "Laufey", "BIGBANG", "Gigi Perez", "Juicewon", "Iggy Pop", "FKA twigs", "Little Simz", "Suicidal Tendencies", "Samia", "Wyldeflower", "Kaskade", "Subtronics", "Mochakk", "Duke Dumont", "BUNT.", "Loboman", "Girl Math (Vnssa x Nala)", "Black Flag", "The Chats", "Oklou", "The Rapture", "COBRAH", "Tomora", "flowerovlove", "Röyksopp", "WhoMadeWho", "Green Velvet x AYYBO", "Carlita x Josh Baker", "&friends", "MËSTIZA", "AZZECCA", "Le Yora", "Jane Remover", "DRAIN", "Model/Actriz", "French Police", "Los Retros", "RØZ", "Glitterer", "Panda & Chok", "Fatboy Slim", "Jazzy", "Joy (Anonymous)"]}], "source": "https://www.fzine.com/culture/coachella-2026-lineup-schedule", "note": "Built from the weekend 1 schedule. A couple of weekend-specific guests are tagged."}, {"year": 2025, "weekends": [{"label": "Weekend 1", "dates": ["Friday April 11", "Saturday April 12", "Sunday April 13"]}, {"label": "Weekend 2", "dates": ["Friday April 18", "Saturday April 19", "Sunday April 20"]}], "days": [{"name": "Friday", "artists": ["Lady Gaga", "Missy Elliott", "Benson Boone", "Marina", "Thee Sacred Souls", "Gabe Real", "Parcels", "The Marías", "Tyla", "The Go-Go's", "Seun Kuti & Egypt 80", "Tiffany Tyson", "The Prodigy", "Miike Snow", "Eyedress", "Djo", "Lola Young", "Saint Jhn", "Ravyn Lenae", "Mustard", "GloRilla", "Yeat", "Lisa", "Sara Landry", "Three 6 Mafia", "Chris Lorenzo", "Austin Millz", "Massio", "Indo Warehouse", "Ca7riel & Paco Amoroso", "Artemas", "A. G. Cook", "D4vd", "4batz", "Maribou State", "Parisi", "Saison", "HiTech", "Speed", "Los Mirlos", "Kneecap", "Julie", "Tops", "Vs Self", "Glixen", "Doom Dave"]}, {"name": "Saturday", "artists": ["Travis Scott", "Green Day", "Charli XCX", "T-Pain", "Jimmy Eat World", "Skrause", "The Original Misfits", "Above & Beyond", "Clairo", "Gustavo Dudamel & LA Phil", "Japanese Breakfast", "Tink", "Megatone", "The Dare", "Horsegiirl", "Hanumanking", "Ivan Cornejo", "Sam Fender", "Yo Gabba Gabba!", "Weezer", "Record Safari", "Keinemusik", "Mau P", "Enhypen", "Shoreline Mafia", "Disco Lines", "Alok", "Salute", "Talón", "Rawayana", "Beth Gibbons", "Darkside", "2hollis", "Viagra Boys", "Glass Beams", "Medium Build", "Elusive", "El Mallila", "VTSS", "Blonde Redhead", "Underscores", "Judeline", "Together Pangaea", "Prison Affair", "Triste Juventud x Tótem"]}, {"name": "Sunday", "artists": ["Post Malone", "Megan Thee Stallion", "Junior H", "Beabadoobee", "Shaboozey", "Jaqck Glam", "Polo & Pan", "Zedd", "Jennie", "Still Woozy", "Keshi", "Meute", "Kraftwerk", "Basement Jaxx", "Rema", "Jessie Murph", "Muni Long", "Fcukers", "Pennywild", "XG", "Ty Dolla $ign", "Chase & Status", "Boris Brejcha", "Sammy Virji", "Ben Böhmer", "Interplanetary Criminal", "Tom Breu", "Amyl and the Sniffers", "Arca", "BigXthaPlug", "Mohamed Ramadan", "Amaarae", "The Beaches", "Hope Tala", "WaveGroove", "Snow Strippers", "Ginger Root", "Circle Jerks", "Soft Play", "Wisp", "Bob Vylan", "Kumo 99", "Sin Rastro"]}], "source": "https://www.thefader.com/2025/04/09/coachella-2025-livestream-performance-schedule", "note": "Built from the weekend 2 schedule; weekend 1 was nearly the same."}]}, {"id": "aftershock", "name": "Aftershock", "aliases": ["sacramento", "rock festival"], "location": "Discovery Park, Sacramento, CA", "editions": [{"year": 2026, "weekends": [{"label": "", "dates": ["Thursday October 1", "Friday October 2", "Saturday October 3", "Sunday October 4"]}], "days": [{"name": "Thursday", "artists": ["My Chemical Romance", "Sublime", "Hot Mulligan", "Mayday Parade", "We The Kings", "Lit", "Free Throw", "The Offspring", "The Used", "New Found Glory", "The Starting Line", "Hawthorne Heights", "L.S. Dunes", "Leap", "The Pretty Reckless", "Nothing More", "Theory Of A Deadman", "Apocalyptica", "Finger Eleven", "Red", "The Violent Hour", "Killswitch Engage", "Sevendust", "Coal Chamber", "The Union Underground", "Ill Niño", "Ünloco", "Brujeria", "Primer 55", "Starset", "From Ashes To New", "Holding Absence", "Caskets", "The Word Alive", "Wind Walkers"]}, {"name": "Friday", "artists": ["Limp Bizkit", "Wu-Tang Clan", "Public Enemy", "Cypress Hill", "Insane Clown Posse", "P.O.D.", "Drowning Pool", "Silly Goose", "$uicideboy$", "Slaughter To Prevail", "Three 6 Mafia", "Kublai Khan TX", "Drain", "Haywire", "Haarper", "Coheed And Cambria", "Underoath", "Alexisonfire", "Senses Fail", "Atreyu", "Finch", "Alesana", "Eyes Set To Kill", "Dethklok", "Chad Gray", "Cradle Of Filth", "Blue Medusa feat. Alissa White-Gluz", "Nekrogoblikon", "Psychostick", "Vianova", "Paleface Swiss", "The Black Dahlia Murder", "Spite", "Bodysnatcher", "Peelingflesh", "Rivers Of Nihil"]}, {"name": "Saturday", "artists": ["Pierce The Veil", "BABYMETAL", "Sleeping With Sirens", "Chiodos", "Set It Off", "Blessthefall", "ivri", "Fear, and Loathing in Las Vegas", "A Day To Remember", "The Story So Far", "Wage War", "The Wonder Years", "The Devil Wears Prada", "Escape The Fate", "Austin Carlile", "Black Label Society", "Down", "Corrosion Of Conformity", "Kylesa", "Melvins", "Pentagram", "Doobie", "Circa Survive", "La Dispute", "Thursday", "Saosin", "Armor For Sleep", "Horse The Band", "Emery", "The Fall Of Troy", "The Ghost Inside", "Counterparts", "After The Burial", "The Acacia Strain", "Stick To Your Guns", "Gideon"]}, {"name": "Sunday", "artists": ["TOOL", "Danny Elfman", "AFI", "Zakk Sabbath", "Buckethead", "Helmet", "CKY", "Queens of the Stone Age", "Stone Temple Pilots", "Highly Suspect", "Wolfmother", "Filter", "Oleander", "Toadies", "Body Count", "Suicidal Tendencies", "Cavalera", "Soulfly", "Municipal Waste", "Cro-Mags", "Codefendants", "Dance Gavin Dance", "The Home Team", "From First To Last", "Hail The Sun", "I See Stars", "Drop Dead, Gorgeous", "Emarosa", "I Set My Friends On Fire", "Sleep Theory", "President", "Jutes", "Holywatr", "The Pretty Wild", "Cenobia"]}], "source": "https://www.gratefulweb.com/?p=676447"}, {"year": 2025, "weekends": [{"label": "", "dates": ["Thursday October 2", "Friday October 3", "Saturday October 4", "Sunday October 5"]}], "days": [{"name": "Thursday", "artists": ["Blink-182", "All Time Low", "Taking Back Sunday", "Alkaline Trio", "State Champs", "Hoobastank", "The Ataris", "Good Charlotte", "The All American Rejects", "Hollywood Undead", "Mom Jeans.", "Bowling for Soup", "Red Jumpsuit Apparatus", "Hot Milk", "Acid Bath", "Power Trip", "Carcass", "High on Fire", "Cattle Decapitation", "Nails", "Snot", "Dry Kill Logic", "Hatebreed", "A Tribute to S.O.D.", "All Shall Perish", "Speed", "Spite", "Thrown", "Left to Suffer"]}, {"name": "Friday", "artists": ["Deftones", "Turnstile", "Knocked Loose", "The Dillinger Escape Plan", "Basement", "Failure", "Glare", "Quannic", "A Perfect Circle", "Lamb of God", "Bruce Dickinson", "Kerry King", "Fear Factory", "Lacuna Coil", "Winds of Plague", "Dream Theater", "Testament", "Exodus", "Alestorm", "Yngwie Malmsteen", "Death Angel", "Gloryhammer", "Forbidden", "Chiodos", "Of Mice & Men", "Get Scared", "Northlane", "Landmvrks", "Violent Vira", "Thornhill"]}, {"name": "Saturday", "artists": ["Korn", "Gojira", "Chevelle", "Slaughter to Prevail", "Bilmuri", "Saliva", "Nonpoint", "Return to Dust", "Bad Omens", "Three Days Grace", "Trivium", "Dayseeker", "Kittie", "Memphis May Fire", "Scary Kids Scaring Kids", "Powerwolf", "DragonForce", "August Burns Red", "Imminence", "Dying Fetus", "Demon Hunter", "Seven Hours After Violet", "Born of Osiris", "Sunami", "Trash Talk", "Scowl", "Dying Wish", "Xibalba", "Snuffed on Sight", "Spy"]}, {"name": "Sunday", "artists": ["Bring Me the Horizon", "Marilyn Manson", "Motionless in White", "Black Veil Brides", "Story of the Year", "The Plot in You", "Sleep Theory", "Rob Zombie", "Mudvayne", "In This Moment", "Machine Head", "Static-X", "Spineshank", "Dope", "Flyleaf Featuring Lacey Sturm", "Pop Evil", "Hinder", "Crossfade", "Sick Puppies", "Rev Theory", "12 Stones", "Five Headed Cobra", "Cavalera Chaos AD", "GWAR", "DevilDriver", "Chimaira", "3 Inches of Blood", "Six Feet Under", "Prong"]}], "source": "https://loudwire.com/aftershock-festival-2025-lineup/"}]}, {"id": "lolla", "name": "Lollapalooza", "aliases": ["lolla", "chicago", "grant park"], "location": "Grant Park, Chicago, IL", "editions": [{"year": 2025, "weekends": [{"label": "", "dates": ["Thursday July 31", "Friday August 1", "Saturday August 2", "Sunday August 3"]}], "days": [{"name": "Thursday", "artists": ["Tyler, The Creator", "Luke Combs", "Gracie Abrams", "Dom Dolla", "Cage The Elephant", "Sierra Ferrell", "Role Model", "Mau P", "Royel Otis", "Barry Can't Swim", "Magdalena Bay", "2hollis", "Cloonee", "Alex Warren", "Overmono", "Xdinary Heroes", "The Blessed Madonna", "Half-Alive", "Mark Ambor", "Fcukers", "Matt Champion", "Glass Beams", "Prospa", "Julie Durand", "Bernarr", "Azzecca", "Ratboys", "Nourished By Time", "Sunami", "Black Party", "The Droptines", "Silly Goose", "The Symposium", "Torren Foot b2b Airwolf Paradise", "Jade LeMac", "DJ Heather", "Yana", "Xaviersobased", "Colby Acuff", "Bo Staloch", "Alexsucks", "Chicago Made", "Girl Tones"]}, {"name": "Friday", "artists": ["Olivia Rodrigo", "Korn", "Djo", "Bleachers", "Wallows", "T-Pain", "Knock2", "Foster The People", "Bladee", "Flipturn", "Isoxo", "Tape B", "Amaarae", "The Dare", "Gigi Perez", "Ravyn Lenae", "Wyatt Flores", "BUNT.", "Ocean Alley", "Del Water Gap", "Otoboke Beaver", "Kenny Mason", "Murda Beatz", "Orla Gartland", "Hey, Nothing", "Alleycvt", "Isabel LaRosa", "Jane Remover", "Alemeda", "Zinadelphia", "Tanner Adell", "Dogpark", "Old Mervs", "Jesse Detor", "Viperactive", "Mary Droppinz", "Hex Cougar", "Carol Ades", "Caroline Kingsbury", "Star Bandz", "Midnight Generation", "Cassandra Coleman", "Winyah"]}, {"name": "Saturday", "artists": ["RÜFÜS DU SOL", "TWICE", "Doechii", "Clairo", "Young Miko", "MK.gee", "Two Friends", "Marina", "Chase & Status", "Levity", "JPEGMAFIA", "Fujii Kaze", "Dr. Fresch", "Bilmuri", "Damiano David", "Orion Sun", "OLE 60", "Bossman Dlow", "Max Mcnown", "Flux Pavilion", "Montell Fish", "Wasia Project", "Layz", "Ca7riel & Paco Amoroso", "Salute", "Charlotte Lawrence", "Kickflip", "Naomi Scott", "Sam Austins", "Chicago Youth Symphony Orchestra", "Newdad", "BoA", "Dua Saleh", "Daniel Allan", "Winnetka Bowling League", "Junior Varsity", "Carter Vail", "Rachel Grae", "People R Ugly", "Landon Conrath", "Jev", "Tessla", "Eddie and the Getaway", "Zoe Ko", "Chance the Rapper"]}, {"name": "Sunday", "artists": ["Sabrina Carpenter", "A$AP Rocky", "Martin Garrix", "The Marías", "Dominic Fike", "Still Woozy", "Finneas", "Remi Wolf", "Latin Mafia", "Gryffin", "Sammy Virji", "Isaiah Rashad", "Mariah The Scientist", "Wave to Earth", "Marlon Hoffstadt", "Artemas", "Joey Valence & Brae", "Katseye", "Maribou State", "La Femme", "Wild Rivers", "Rebecca Black", "Wunderhorse", "Laila!", "Boynextdoor", "Flowerovlove", "Willow", "Avalon Vincent", "Lima Joe P", "Nimino", "Jigitz", "The Criticals", "Landon Barker", "Blk Odyssey", "Benches", "Lekan", "Sofia Camara", "Aliyah's Interlude", "Graham Barham", "Kaicrewsade", "Raecola"]}], "source": "https://fox32chicago.com/news/lolla-day-lineup-2025"}]}, {"id": "edc", "name": "Electric Daisy Carnival (EDC Las Vegas)", "aliases": ["edc", "edc vegas", "insomniac", "las vegas"], "location": "Las Vegas Motor Speedway, Las Vegas, NV", "editions": [{"year": 2025, "partial": true, "weekends": [{"label": "", "dates": ["May 16–18"]}], "days": [{"name": "Featured acts (full lineup has 250+ artists)", "artists": ["Martin Garrix", "Tiësto", "Fisher", "Dom Dolla", "Kaskade", "DJ Snake", "Armin van Buuren", "Sara Landry", "SLANDER", "Mochakk", "Illenium", "RL Grime", "Tape B", "Gesaffelstein", "Alison Wonderland B2B Kaskade", "Rezz", "Excision", "Crankdat B2B Tape B", "Svdden Death", "Sullivan King", "Basswell", "Shlømo", "Sub Zero Project", "Showtek", "Disco Dom", "Hugel & Friends", "Walker & Royce", "Vini Vici", "Maddix B2B Ben Nicky", "PRYDA", "The Martinez Brothers B2B Loco Dice", "I Hate Models B2B Nico Moreno", "Skream B2B Partiboi69", "Prospa B2B Josh Baker"]}], "source": "https://edmnomad.com/?p=15736", "note": "Featured acts only. The daily split wasn't published in the sources I found."}]}, {"id": "tomorrowland", "name": "Tomorrowland", "aliases": ["tomorrowland belgium", "boom"], "location": "Boom, Belgium", "editions": [{"year": 2025, "partial": true, "weekends": [{"label": "Weekend 1", "dates": ["July 18–20"]}, {"label": "Weekend 2", "dates": ["July 25–27"]}], "days": [{"name": "Highlights (full lineup has 600+ artists)", "artists": ["Swedish House Mafia", "David Guetta", "Martin Garrix", "Anyma", "Armin van Buuren", "Charlotte De Witte", "Amelie Lens", "Alok", "Fisher", "ANNA", "Job Jobse", "Amber Broos", "Anyma b2b Solomun", "Dimitri Vegas b2b Fantasm", "DJ BORING b2b HAAi", "Timmy Trumpet b2b Dimitri Vegas", "VTSS b2b SPFDJ", "Sam Divine b2b Arielle Free"]}], "source": "https://djmag.com/news/tomorrowland-2025-full-line-announced", "note": "Highlights only."}]}];
+function toast(msg){var t=$("toast");t.textContent=msg;t.classList.add("on");clearTimeout(toast._t);toast._t=setTimeout(function(){t.classList.remove("on");},3200);}
+function backBtn(fn){var b=el("button","btn","Back");b.onclick=fn;return b;}
+
+function wizPick(q){
+  q=q||"";
+  var box=el("div");
+  box.appendChild(el("h2",null,"Add a show"));
+  box.appendChild(el("p","sub","Find the festival, pick the year, tick who you saw."));
+  var inp=el("input");inp.type="search";inp.placeholder="Search festivals (Coachella, EDC, Lolla...)";inp.value=q;inp.autocomplete="off";inp.autocapitalize="off";box.appendChild(inp);
+  var list=el("div");list.style.marginTop="12px";box.appendChild(list);
+  function draw(){
+    list.textContent="";var s=norm(inp.value);
+    var hits=CATALOG.filter(function(f){return !s||norm(f.name).indexOf(s)>-1||f.aliases.some(function(a){return a.indexOf(s)>-1;});});
+    hits.forEach(function(f){
+      var b=el("button","wizcard");b.appendChild(el("b",null,f.name));
+      b.appendChild(el("small",null,f.location+"  ·  "+f.editions.map(function(e){return e.year;}).join(", ")));
+      b.onclick=function(){wizYear(f);};list.appendChild(b);
+    });
+    var other=el("button","wizcard dashed");
+    other.appendChild(el("b",null,s&&!hits.length?"Add “"+inp.value.trim()+"” yourself":"Not listed? Add it yourself"));
+    other.appendChild(el("small",null,"Paste the lineup, then tick who you saw."));
+    other.onclick=function(){wizCustom(inp.value.trim());};list.appendChild(other);
+  }
+  inp.oninput=draw;draw();
+  var a=el("div","actions");var m=el("button","btn","Use the manual form");m.onclick=function(){openEdit(null);};
+  var c=el("button","btn","Close");c.onclick=closeSheet;a.appendChild(m);a.appendChild(c);box.appendChild(a);
+  openSheet(box);
+}
+
+function wizYear(f){
+  var box=el("div");box.appendChild(el("h2",null,f.name));box.appendChild(el("p","sub","Which year?"));
+  f.editions.forEach(function(e){
+    var b=el("button","wizcard");
+    b.appendChild(el("b",null,String(e.year)+(e.partial?"  ·  highlights only":"")));
+    var d0=e.weekends[0].dates;
+    b.appendChild(el("small",null,e.weekends.length>1?e.weekends.length+" weekends":d0.length>1?d0[0]+" to "+d0[d0.length-1]:d0[0]));
+    b.onclick=function(){if(e.weekends.length>1)wizWeekend(f,e);else wizCheck(f,e,0);};box.appendChild(b);
+  });
+  var o=el("button","wizcard dashed");o.appendChild(el("b",null,"A different year"));o.appendChild(el("small",null,"Add it yourself with a pasted lineup."));
+  o.onclick=function(){wizCustom(f.name,f.location);};box.appendChild(o);
+  var a=el("div","actions");a.appendChild(backBtn(function(){wizPick();}));box.appendChild(a);openSheet(box);
+}
+
+function wizWeekend(f,e){
+  var box=el("div");box.appendChild(el("h2",null,f.name+" "+e.year));box.appendChild(el("p","sub","Which weekend did you go?"));
+  e.weekends.forEach(function(w,i){
+    var b=el("button","wizcard");b.appendChild(el("b",null,w.label));b.appendChild(el("small",null,w.dates[0]+(w.dates.length>1?" to "+w.dates[w.dates.length-1]:"")));
+    b.onclick=function(){wizCheck(f,e,i);};box.appendChild(b);
+  });
+  var bothCard=el("button","wizcard dashed");bothCard.appendChild(el("b",null,"Both weekends"));bothCard.appendChild(el("small",null,"Tick once. It saves to each weekend with its own dates."));
+  bothCard.onclick=function(){wizCheck(f,e,-1);};box.appendChild(bothCard);
+  var a=el("div","actions");a.appendChild(backBtn(function(){wizYear(f);}));box.appendChild(a);openSheet(box);
+}
+
+function cleanName(x){return String(x||"").replace(/[*_`#>]+/g,"").replace(/^["'“”]+|["'“”]+$/g,"").replace(/\s+/g," ").trim();}
+function dedupeNames(a){var seen={},o=[];a.forEach(function(n){var k=norm(n);if(k&&!seen[k]){seen[k]=1;o.push(n);}});return o;}
+function parseAIAnswer(txt){
+  var t=String(txt||"").trim();if(!t)return null;
+  var j=null,a=t.indexOf("{"),b=t.lastIndexOf("}");
+  if(a>-1&&b>a){try{j=JSON.parse(t.slice(a,b+1));}catch(e){j=null;}}
+  if(!j){var a2=t.indexOf("["),b2=t.lastIndexOf("]");if(a2>-1&&b2>a2){try{j=JSON.parse(t.slice(a2,b2+1));}catch(e){j=null;}}}
+  if(j){
+    var arr=Array.isArray(j)?j:(j.days||[]);
+    var out=arr.map(function(d,i){
+      var list=(d&&(d.artists||d.lineup))||[];
+      list=list.map(function(x){return cleanName(typeof x==="string"?x:(x&&x.name));}).filter(Boolean);
+      return {name:cleanName(d&&(d.label||d.day||d.name))||"Day "+(i+1),artists:dedupeNames(list)};
+    }).filter(function(d){return d.artists.length;});
+    if(out.length)return {days:out,meta:Array.isArray(j)?{}:j};
+  }
+  var dayRe=/^((mon|tue|tues|wed|thu|thur|thurs|fri|sat|sun)[a-z]*\b.*|day\s*\d+.*|weekend\s*\d+.*)$/i;
+  var days=[],cur=null;
+  t.split(/\r?\n/).forEach(function(raw){
+    var line=raw.replace(/^[\s>#*_]+|[\s*_]+$/g,"").replace(/^[-•·]\s+/,"").replace(/^\d+[.)]\s+/,"").trim();
+    if(!line||/^```/.test(line))return;
+    var isHead=/:$/.test(line)||(dayRe.test(line)&&line.length<60&&(line.split(",").length<3));
+    if(isHead){var lab=line.replace(/:$/,"").trim();if(lab.length<60){cur={name:lab,artists:[]};days.push(cur);return;}}
+    if(line.length>90||/^(note|sources?|source:|i |here|these|this|the lineup|please)/i.test(line))return;
+    line=line.replace(/^\d{1,2}(:\d{2})?\s*(am|pm)?\s*[–—-]\s*/i,"");
+    if(!cur){cur={name:"Day 1",artists:[]};days.push(cur);}
+    var parts=(line.split(",").length>=3)?line.split(","):[line];
+    parts.forEach(function(p){var n=cleanName(p);if(n)cur.artists.push(n);});
+  });
+  days=days.map(function(d){d.artists=dedupeNames(d.artists);return d;}).filter(function(d){return d.artists.length;});
+  return days.length?{days:days,meta:{}}:null;
+}
+function aiPrompt(name,year,loc,wk,when){
+  var who=name+" "+year+(wk?" ("+wk+")":"")+(loc?", "+loc:"");
+  var went=(wk||when)?"\n\nI went to "+(wk||"this edition")+(when?" ("+when+")":"")+", so use that weekend's real calendar dates in the day labels"+(wk?" and mark any acts that only played "+wk:"")+".":"";
+  return "I'm logging festivals I've been to. Please search the web and give me the lineup for "+who+", grouped by day."+went+"\n\n"+
+  "Reply with ONLY one JSON code block in exactly this format:\n"+
+  "{\"festival\":\""+name+"\",\"year\":"+year+",\"weekend\":\""+(wk||"")+"\",\"location\":\"City, State/Country\",\"days\":[{\"label\":\"Friday April 11\",\"artists\":[\"Artist One\",\"Artist Two\"]}]}\n\n"+
+  "Rules: use each performer's name exactly as printed, one entry per act, include every stage. Label each day with the weekday and date. If the daily split wasn't published, use one day labeled with the date range. If you're unsure about a name, leave it out and tell me after the JSON.";
+}
+function copyText(txt,done){
+  function fb(){var ta=document.createElement("textarea");ta.value=txt;ta.style.cssText="position:fixed;opacity:0";document.body.appendChild(ta);ta.select();try{document.execCommand("copy");done(true);}catch(e){done(false);}ta.remove();}
+  try{if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(txt).then(function(){done(true);},fb);return;}}catch(e){}
+  fb();
+}
+
+function wizCustom(name,loc){
+  var box=el("div");box.appendChild(el("h2",null,"Add it yourself"));
+  box.appendChild(el("p","sub","Not in the list? Let your AI fetch the lineup, or paste one in."));
+  var fest=el("input");fest.value=name||"";fest.placeholder="Festival or show name";
+  var year=el("input");year.type="number";year.inputMode="numeric";year.value=new Date().getFullYear();var yearTouched=false;year.oninput=function(){yearTouched=true;};
+  var row=el("div","row");var l=el("div");l.appendChild(el("label",null,"Name"));l.appendChild(fest);var r=el("div");r.appendChild(el("label",null,"Year"));r.appendChild(year);row.appendChild(l);row.appendChild(r);box.appendChild(row);
+  box.appendChild(el("label",null,"Location (optional)"));var loc_=el("input");loc_.value=loc||"";box.appendChild(loc_);
+  box.appendChild(el("label",null,"Weekend (only if the festival runs more than one)"));
+  var wkSel=el("select");["","Weekend 1","Weekend 2","Weekend 3"].forEach(function(w){var o=el("option",null,w||"Not applicable");o.value=w;wkSel.appendChild(o);});box.appendChild(wkSel);
+  box.appendChild(el("label",null,"Dates you went (optional)"));
+  var when=el("input");when.placeholder="e.g. April 18–20";box.appendChild(when);
+
+  var ai=el("div","aibox");
+  ai.appendChild(el("b",null,"Fastest: ask your AI"));
+  ai.appendChild(el("p","hint","1. Copy the prompt and send it to Claude, ChatGPT or Gemini.  2. Paste its answer below."));
+  var btns=el("div","aibtns");
+  var promptBox=el("textarea");promptBox.rows=6;promptBox.readOnly=true;promptBox.style.display="none";promptBox.style.marginTop="10px";
+  function current(){var n=fest.value.trim();if(!n){fest.style.borderColor="#ff5a7a";fest.focus();return null;}fest.style.borderColor="";return aiPrompt(n,parseInt(year.value,10)||new Date().getFullYear(),loc_.value.trim(),wkSel.value,when.value.trim());}
+  var cp=el("button","btn primary","Copy prompt");
+  cp.onclick=function(){var p=current();if(!p)return;promptBox.value=p;promptBox.style.display="";copyText(p,function(ok){cp.textContent=ok?"Copied!":"Copy it below";setTimeout(function(){cp.textContent="Copy prompt";},2500);});};
+  btns.appendChild(cp);
+  [["Claude","https://claude.ai/new?q="],["ChatGPT","https://chatgpt.com/?q="],["Gemini","https://gemini.google.com/app"]].forEach(function(x){
+    var a=el("a","btn",x[0]+" ↗");a.target="_blank";a.rel="noopener noreferrer";a.style.textDecoration="none";a.href=x[1];
+    a.onclick=function(){var p=current();if(!p){return false;}a.href=x[1]+(x[1].indexOf("?q=")>-1?encodeURIComponent(p):"");copyText(p,function(){});promptBox.value=p;promptBox.style.display="";};
+    btns.appendChild(a);});
+  ai.appendChild(btns);ai.appendChild(promptBox);
+  ai.appendChild(el("label",null,"Paste your AI's answer"));
+  var ans=el("textarea");ans.rows=5;ans.placeholder="Paste the JSON (or a plain list with day headings) here";ai.appendChild(ans);
+  box.appendChild(ai);
+
+  box.appendChild(el("p","hint","Or type it yourself"));
+  box.appendChild(el("label",null,"Day"));var dl=el("input");dl.placeholder="e.g. Friday June 20";box.appendChild(dl);
+  box.appendChild(el("label",null,"Lineup (one per line, or separated by commas)"));
+  var ta=el("textarea");ta.rows=6;ta.placeholder="Artist one\nArtist two\nArtist three";box.appendChild(ta);
+  var err=el("p","hint","");err.style.color="var(--danger)";box.appendChild(err);
+  var a=el("div","actions");a.appendChild(backBtn(function(){wizPick(name);}));
+  var go=el("button","btn primary","Next: tick who you saw");
+  go.onclick=function(){
+    err.textContent="";
+    var n=fest.value.trim(),y=parseInt(year.value,10);
+    if(!n||!y){fest.style.borderColor="#ff5a7a";return;}
+    var days=null,locOut=loc_.value.trim(),wkOut=wkSel.value;
+    if(ans.value.trim()){
+      var parsed=parseAIAnswer(ans.value);
+      if(!parsed){err.textContent="I couldn't find any artists in that answer. Try asking the AI for the JSON format again, or type the lineup below.";return;}
+      days=parsed.days;if(!yearTouched&&parsed.meta&&parseInt(parsed.meta.year,10)>1950&&parseInt(parsed.meta.year,10)<2100)y=parseInt(parsed.meta.year,10);if(!wkOut&&parsed.meta&&/^weekend\s*\d/i.test(String(parsed.meta.weekend||"")))wkOut="Weekend "+String(parsed.meta.weekend).match(/\d+/)[0];if(!locOut&&parsed.meta&&parsed.meta.location)locOut=String(parsed.meta.location).slice(0,80);
+    }else{
+      var list=ta.value.split(/[\n,]+/).map(function(x){return x.trim();}).filter(Boolean);
+      if(!list.length){err.textContent="Paste your AI's answer above, or type a lineup.";ta.style.borderColor="#ff5a7a";return;}
+      days=[{name:dl.value.trim()||"Day 1",artists:list}];
+    }
+    wizCheck({name:n,location:locOut},{year:y,custom:true,weekend:wkOut,weekends:[{label:"",dates:days.map(function(d){return d.name;})}],days:days},0);
+  };
+  a.appendChild(go);box.appendChild(a);openSheet(box);
+}
+
+function wizCheck(f,e,wk){
+  var both=wk<0,weekendNo=wk+1;
+  var wkLabel=both?"Both weekends":(e.custom?(e.weekend||""):(e.weekends.length>1?e.weekends[wk].label:""));
+  var tags=[];
+  var days=e.days.map(function(d){
+    var tg={},names=[];
+    d.artists.forEach(function(x){var n=typeof x==="string"?x:x[0],w=typeof x==="string"?null:x[1];tg[norm(n)]=w;if(both||w==null||w===weekendNo)names.push(n);});
+    tags.push(tg);return {name:d.name,artists:names};
+  });
+  var dates=e.weekends[both?0:wk].dates;
+  var sel={};  // "di|key" -> true
+  var box=el("div");
+  box.appendChild(el("h2",null,f.name+" "+e.year+(wkLabel?" · "+wkLabel:"")));
+  box.appendChild(el("p","sub","Tap everyone you saw."));
+  if(e.note||e.partial)box.appendChild(el("p","hint",(e.note||"")+(e.partial?" Add anyone we missed under each day.":"")));
+  var find=el("input");find.type="search";find.placeholder="Filter artists...";find.autocomplete="off";find.autocapitalize="off";find.style.margin="6px 0 4px";box.appendChild(find);
+  var holder=el("div");box.appendChild(holder);
+  var count=el("span");
+  function total(){return Object.keys(sel).length;}
+  function upd(){count.textContent=total();save_.disabled=!total();}
+  function key(di,n){return di+"|"+norm(n);}
+  var sections=[];
+  function buildDay(di){
+    var d=days[di];var sec=el("section","wizday");
+    var head=el("div","wizdayhead");
+    var title=both?(e.weekends.map(function(w){return w.dates[di];}).filter(Boolean).join("  ·  ")||d.name):(dates[di]||d.name);
+    head.appendChild(el("b",null,title));
+    var allb=el("button","smallbtn","Select all");head.appendChild(allb);sec.appendChild(head);
+    if(e.partial&&d.name)sec.appendChild(el("div","hint",d.name));
+    var grid=el("div","picks");sec.appendChild(grid);
+    function addPick(n,on){
+      var tg_=both&&tags[di]&&tags[di][norm(n)];var b=el("button","pick"+(on?" on":""),n+(tg_?" · W"+tg_+" only":""));b.setAttribute("data-n",norm(n));
+      b.onclick=function(){var k=key(di,n);if(sel[k]){delete sel[k];b.classList.remove("on");}else{sel[k]=true;b.classList.add("on");}upd();};
+      grid.appendChild(b);return b;
+    }
+    d.artists.forEach(function(n){addPick(n,false);});
+    allb.onclick=function(){
+      var btns=Array.prototype.filter.call(grid.children,function(b){return b.style.display!=="none";});
+      var allOn=btns.every(function(b){return b.classList.contains("on");});
+      btns.forEach(function(b){var k=di+"|"+b.getAttribute("data-n");if(allOn){delete sel[k];b.classList.remove("on");}else{sel[k]=true;b.classList.add("on");}});
+      upd();
+    };
+    var addrow=el("div","addrow");var ai=el("input");ai.placeholder="+ Add someone not listed";ai.autocomplete="off";
+    var ab=el("button","btn","Add");
+    function doAdd(){var n=ai.value.trim();if(!n)return;var k=key(di,n);
+      var ex=Array.prototype.filter.call(grid.children,function(b){return b.getAttribute("data-n")===norm(n);})[0];
+      if(ex){if(!sel[k]){sel[k]=true;ex.classList.add("on");}}else{d.artists.push(n);sel[k]=true;addPick(n,true);}
+      ai.value="";upd();}
+    ab.onclick=doAdd;ai.onkeydown=function(ev){if(ev.key==="Enter"){ev.preventDefault();doAdd();}};
+    addrow.appendChild(ai);addrow.appendChild(ab);sec.appendChild(addrow);
+    sections.push({sec:sec,grid:grid});holder.appendChild(sec);
+  }
+  days.forEach(function(d,i){buildDay(i);});
+  find.oninput=function(){var s=norm(find.value);
+    sections.forEach(function(x){var any=false;Array.prototype.forEach.call(x.grid.children,function(b){var m=!s||b.getAttribute("data-n").indexOf(s)>-1;b.style.display=m?"":"none";if(m)any=true;});x.sec.style.display=(!s||any)?"":"none";});};
+
+  if(e.custom){
+    var more=el("button","wizcard dashed");more.appendChild(el("b",null,"+ Add another day"));more.style.marginTop="12px";
+    more.onclick=function(){
+      var m=el("div","wizday");m.appendChild(el("label",null,"Day"));var di_=el("input");di_.placeholder="e.g. Saturday June 21";m.appendChild(di_);
+      m.appendChild(el("label",null,"Lineup"));var t2=el("textarea");t2.rows=5;m.appendChild(t2);
+      var ok=el("button","btn primary","Add day");ok.style.marginTop="10px";
+      ok.onclick=function(){var list=t2.value.split(/[\n,]+/).map(function(x){return x.trim();}).filter(Boolean);if(!list.length)return;
+        var lab=di_.value.trim()||"Day "+(days.length+1);days.push({name:lab,artists:list});dates.push(lab);m.remove();buildDay(days.length-1);};
+      m.appendChild(ok);more.parentNode.insertBefore(m,more);more.style.display="none";
+      ok.addEventListener("click",function(){more.style.display="";});
+    };
+    box.appendChild(more);
+  }
+
+  var foot=el("div","wizfoot");
+  foot.appendChild(backBtn(function(){if(e.custom)wizCustom(f.name,f.location);else if(e.weekends.length>1)wizWeekend(f,e);else wizYear(f);}));
+  var save_=el("button","btn primary");save_.appendChild(document.createTextNode("Save "));save_.appendChild(count);save_.appendChild(document.createTextNode(" artists"));
+  function saveWeekend(w){
+    var wl=e.custom?(e.weekend||""):(e.weekends.length>1?e.weekends[w].label:"");
+    var dts=e.weekends[w].dates;
+    var target=state.shows.filter(function(s){return s.year===e.year&&norm(s.festival)===norm(f.name)&&norm(s.weekend||"")===norm(wl);})[0];
+    if(!target){target={id:uid(),year:e.year,festival:f.name,location:f.location||"",days:[]};if(wl)target.weekend=wl;state.shows.push(target);}
+    days.forEach(function(d,di){
+      var picked=d.artists.filter(function(a){var t=tags[di][norm(a)];return sel[key(di,a)]&&(t==null||!both||t===w+1);});
+      if(!picked.length)return;
+      var label=dts[di]||d.name;
+      var hit=target.days.filter(function(x){return norm(x.label)===norm(label);})[0];
+      if(hit){picked.forEach(function(a){if(hit.artists.every(function(z){return norm(z)!==norm(a);})){hit.artists.push(a);}});}
+      else target.days.push({label:label,artists:picked});
+    });
+  }
+  save_.onclick=function(){
+    if(!total())return;
+    if(state.sample)state={sample:false,title:state.title||"",colors:{},shows:[]};
+    colorFor(f.name);
+    var idxs=both?e.weekends.map(function(_,i){return i;}):[wk];
+    idxs.forEach(saveWeekend);
+    var n=total();
+    save();closeSheet();render();
+    toast("Saved "+n+" artist"+(n===1?"":"s")+" to "+f.name+" "+e.year+(wkLabel?" ("+wkLabel.toLowerCase()+")":""));
+  };
+  foot.appendChild(save_);box.appendChild(foot);
+  upd();openSheet(box);
+}
+
+/* wire up */
+$("addBtn").onclick=function(){wizPick();};
+$("menuBtn").onclick=openBackup;
+$("q").oninput=function(e){ui.q=e.target.value;render();};
+$("clearSample").onclick=function(){state={sample:false,title:state.title||"",colors:{},shows:[]};save();render();};
+document.addEventListener("keydown",function(e){if(e.key==="Escape")closeSheet();});
+
+$("themeBtn").onclick=function(){
+  var box=el("div");box.appendChild(el("h2",null,"Theme"));box.appendChild(el("p","sub","Just for you. It doesn't change shared links."));
+  Object.keys(THEMES).forEach(function(k){
+    var t=THEMES[k];var b=el("button","themeopt"+(k===theme?" on":""));
+    b.style.background=t.bg;b.style.color=t.fg;
+    b.appendChild(el("b",null,t.name));b.appendChild(el("small",null,t.tag));
+    var w=el("div","sws");t.palette.slice(0,6).forEach(function(c){var i=el("i");i.style.background=c;w.appendChild(i);});b.appendChild(w);
+    b.onclick=function(){theme=k;try{localStorage.setItem(THEME_KEY,k);}catch(e){}applyTheme();closeSheet();render();};
+    box.appendChild(b);
+  });
+  var c=el("button","btn","Close");c.style.cssText="width:100%";c.onclick=closeSheet;box.appendChild(c);openSheet(box);
+};
+$("renameBtn").onclick=function(){
+  var box=el("div");box.appendChild(el("h2",null,"Name your list"));
+  box.appendChild(el("p","sub","Shows at the top of the page and on shared links."));
+  var inp=el("input");inp.value=state.title||"";inp.placeholder="e.g. Neems's Show History";inp.maxLength=60;box.appendChild(inp);
+  var a=el("div","actions");var c=el("button","btn","Cancel");c.onclick=closeSheet;
+  var ok=el("button","btn primary","Save");ok.onclick=function(){state.title=inp.value.trim();save();closeSheet();render();};
+  a.appendChild(c);a.appendChild(ok);box.appendChild(a);openSheet(box);
+};
+
+$("shareBtn").onclick=function(){
+  var box=el("div");box.appendChild(el("h2",null,"Share this list"));
+  box.appendChild(el("p","sub","Makes a link with your whole list inside it. Anyone who opens it sees your list (read-only) and can start their own."));
+  var out=el("textarea");out.rows=4;out.readOnly=true;out.value="Building link...";box.appendChild(out);
+  var note=el("p","hint","");box.appendChild(note);
+  var a=el("div","actions");var close=el("button","btn","Close");close.onclick=closeSheet;
+  var go=el("button","btn primary","Share / copy link");go.disabled=true;
+  a.appendChild(close);a.appendChild(go);box.appendChild(a);openSheet(box);
+  var base=location.href.split("#")[0];
+  if(location.protocol==="file:")note.textContent="Heads up: this link only works for other people once this page is hosted online (for example on GitHub Pages).";
+  encodeShare(state).then(function(tok){
+    var url=base+"#s="+tok;out.value=url;go.disabled=false;
+    if(url.length>8000)note.textContent=(note.textContent?note.textContent+" ":"")+"This is a long link. Some apps may cut it off, so test it before sending.";
+    go.onclick=function(){
+      if(navigator.share){navigator.share({title:state.title||"Show History",url:url}).catch(function(){});return;}
+      out.focus();out.select();
+      try{(navigator.clipboard&&navigator.clipboard.writeText(url)||Promise.reject()).then(function(){go.textContent="Copied!";},function(){document.execCommand("copy");go.textContent="Copied!";});}catch(e){try{document.execCommand("copy");go.textContent="Copied!";}catch(e2){}}
+    };
+  });
+};
+
+function boot(){
+  $("ver").textContent="Show History  ·  v"+APP_VERSION+"  ·  "+APP_DATE;
+  var m=/^#s=(.+)$/.exec(location.hash);
+  if(m){
+    decodeShare(m[1]).then(function(d){
+      state=d;ui.view=true;
+      var n=$("viewNote");n.textContent="";
+      n.appendChild(el("span",null,"You're viewing a shared list. Read-only."));
+      render();
+    },function(){state=load()||sample();render();});
+    $("mineBtn").onclick=function(e){e.preventDefault();location.href=location.href.split("#")[0];};
+    state=state||{sample:false,colors:{},shows:[]};
+    return;
+  }
+  state=load()||sample();render();
+}
+window.addEventListener("hashchange",function(){location.reload();});
+boot();
+})();
+</script>
+</body>
+</html>
